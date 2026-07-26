@@ -100,10 +100,10 @@
 /* Builder Workspace (Split Iframe & Code Editor) */
 .builder-workspace {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  min-height: 650px;
-  height: calc(100vh - 280px);
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.25rem;
+  min-height: 680px;
+  height: calc(100vh - 300px);
 }
 
 .workspace-header {

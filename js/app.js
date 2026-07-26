@@ -121,6 +121,19 @@ class AppController {
     this.codeEditor = new CodeEditorManager('code-editor-panel', (files) => {
       // Realtime live update on code edit
       this.preview.updatePreview(files.html, files.css, files.js);
+      if (this.currentProject) {
+        this.currentProject.files['index.html'] = files.html;
+        this.currentProject.files['style.css'] = files.css;
+        this.currentProject.files['script.js'] = files.js;
+        
+        // Find project in dashboard manager list and update
+        const existing = this.dashboardManager.projects.find(p => p.id === this.currentProject.id);
+        if (existing) {
+          existing.files = this.currentProject.files;
+          existing.updatedAt = new Date().toISOString().split('T')[0];
+          this.dashboardManager.saveProjects();
+        }
+      }
     });
 
     // Builder Type Selector buttons
