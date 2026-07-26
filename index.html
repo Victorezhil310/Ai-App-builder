@@ -599,11 +599,12 @@
       <div class="modal-body">
         <p style="color:var(--text-secondary); margin-bottom:1rem;">Select your cloud deployment target:</p>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.25rem;">
-          <button class="btn btn-outline start-deploy-btn" data-provider="vercel"><i class="fas fa-bolt"></i> Deploy to Vercel</button>
-          <button class="btn btn-outline start-deploy-btn" data-provider="netlify"><i class="fas fa-gem"></i> Deploy to Netlify</button>
-          <button class="btn btn-outline start-deploy-btn" data-provider="github"><i class="fab fa-github"></i> GitHub Pages</button>
-          <button class="btn btn-outline start-deploy-btn" data-provider="cloudflare"><i class="fas fa-cloud"></i> Cloudflare Pages</button>
+        <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.25rem;">
+          <button class="btn btn-primary start-deploy-btn" data-provider="local"><i class="fas fa-globe"></i> Deploy to Local Web Hosting (Recommended)</button>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+            <button class="btn btn-outline start-deploy-btn" data-provider="vercel"><i class="fas fa-bolt"></i> Vercel Deploy</button>
+            <button class="btn btn-outline start-deploy-btn" data-provider="netlify"><i class="fas fa-gem"></i> Netlify Deploy</button>
+          </div>
         </div>
 
         <div id="deploy-logs-box" style="background:#090d16; padding:1rem; border-radius:8px; font-family:var(--font-code); font-size:0.85rem; height:140px; overflow-y:auto; border:1px solid var(--border-color); color:var(--text-secondary);">

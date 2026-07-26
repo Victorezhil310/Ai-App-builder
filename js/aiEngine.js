@@ -1,11 +1,19 @@
 /* ==========================================================================
-   AI CODE SYNTHESIZER ENGINE
-   Generates rich HTML, CSS, and JS code based on user prompt and category
+   AI CODE SYNTHESIZER ENGINE (HIGH-FIDELITY LOCAL CODES)
    ========================================================================== */
 
 export class AIEngine {
   constructor() {
-    this.generationSpeed = 30; // Simulated streaming interval ms
+    this.generationSpeed = 30;
+  }
+
+  /**
+   * Check for illegal/harmful words to ensure legal generation only
+   */
+  isIllegalPrompt(prompt) {
+    const blackList = ['hack', 'bypass', 'exploit', 'phishing', 'malware', 'ddos', 'steal', 'spyware'];
+    const lower = prompt.toLowerCase();
+    return blackList.some(bad => lower.includes(bad));
   }
 
   /**
@@ -13,8 +21,15 @@ export class AIEngine {
    */
   async generateProject(promptText, builderType = 'App') {
     const cleanPrompt = promptText.trim() || 'Modern AI Web Application';
-    const title = this.extractTitle(cleanPrompt, builderType);
     
+    // Safety check
+    if (this.isIllegalPrompt(cleanPrompt)) {
+      throw new Error("Content blocked by security filters: Prompt contains potentially harmful or unauthorized keywords.");
+    }
+
+    const title = this.extractTitle(cleanPrompt, builderType);
+
+    // Call real Gemini API if key is present
     const apiKey = localStorage.getItem('gemini_api_key');
     if (apiKey) {
       try {
@@ -40,10 +55,31 @@ export class AIEngine {
       }
     }
 
-    // Fallback Mock Synthesizer
-    const html = this.buildHTML(title, cleanPrompt, builderType);
-    const css = this.buildCSS(cleanPrompt, builderType);
-    const js = this.buildJS(cleanPrompt, builderType);
+    // High-Fidelity Local Custom Generator based on keyword matching
+    const lower = cleanPrompt.toLowerCase();
+    let html, css, js;
+
+    if (lower.includes('flipkart') || lower.includes('shop') || lower.includes('ecommerce') || lower.includes('store') || lower.includes('amazon')) {
+      // 1. High-Fidelity Flipkart E-commerce clone
+      html = this.buildFlipkartHTML(title);
+      css = this.buildFlipkartCSS();
+      js = this.buildFlipkartJS();
+    } else if (lower.includes('restaurant') || lower.includes('bistro') || lower.includes('food') || lower.includes('dining')) {
+      // 2. High-Fidelity Restaurant Booking site
+      html = this.buildRestaurantHTML(title);
+      css = this.buildRestaurantCSS();
+      js = this.buildRestaurantJS();
+    } else if (lower.includes('portfolio') || lower.includes('resume') || lower.includes('developer') || lower.includes('designer')) {
+      // 3. High-Fidelity Developer Portfolio
+      html = this.buildPortfolioHTML(title);
+      css = this.buildPortfolioCSS();
+      js = this.buildPortfolioJS();
+    } else {
+      // 4. Default Clean SaaS Landing Page template
+      html = this.buildLandingHTML(title);
+      css = this.buildLandingCSS();
+      js = this.buildLandingJS();
+    }
 
     return {
       title,
@@ -56,6 +92,14 @@ export class AIEngine {
         'script.js': js
       }
     };
+  }
+
+  extractTitle(prompt, builderType) {
+    const words = prompt.split(' ');
+    if (words.length > 1 && words.length <= 4) {
+      return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+    return `AI ${builderType} - ${words.slice(0, 3).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`;
   }
 
   async callGeminiAPI(apiKey, prompt, builderType) {
@@ -74,19 +118,11 @@ export class AIEngine {
       contents: [
         {
           role: 'user',
-          parts: [
-            {
-              text: `Build a ${builderType} based on this prompt: "${prompt}". Return only the JSON object with html, css, and js keys.`
-            }
-          ]
+          parts: [{ text: `Build a ${builderType} based on this prompt: "${prompt}". Return only the JSON object with html, css, and js keys.` }]
         }
       ],
       systemInstruction: {
-        parts: [
-          {
-            text: systemInstruction
-          }
-        ]
+        parts: [{ text: systemInstruction }]
       },
       generationConfig: {
         responseMimeType: 'application/json'
@@ -95,9 +131,7 @@ export class AIEngine {
 
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
 
@@ -114,243 +148,172 @@ export class AIEngine {
     return JSON.parse(textContent.trim());
   }
 
-  extractTitle(prompt, builderType) {
-    const words = prompt.split(' ');
-    if (words.length > 1 && words.length <= 4) {
-      return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    }
-    return `AI ${builderType} - ${words.slice(0, 3).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`;
-  }
-
-  buildHTML(title, prompt, builderType) {
-    const lower = prompt.toLowerCase();
-    
-    // Dynamic component sections based on prompt keywords
-    let navLinks = `
-      <a href="#features">Features</a>
-      <a href="#showcase">Showcase</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#contact" class="nav-btn">Contact Us</a>
-    `;
-
-    let heroContent = `
-      <div class="badge-tag">✨ Generated with AI App Builder</div>
-      <h1>${title}</h1>
-      <p class="hero-subtext">Empowering your digital presence with next-gen automated intelligence. Built seamlessly with zero coding required.</p>
-      <div class="hero-cta-group">
-        <button class="primary-btn" onclick="handleAction('Get Started')">Get Started Free <i class="fas fa-arrow-right"></i></button>
-        <button class="secondary-btn" onclick="handleAction('Learn More')">Explore Features</button>
-      </div>
-    `;
-
-    if (lower.includes('restaurant') || lower.includes('food')) {
-      navLinks = `<a href="#menu">Menu</a><a href="#story">About Us</a><a href="#booking" class="nav-btn">Book Table</a>`;
-      heroContent = `
-        <div class="badge-tag">🍷 Culinary Excellence</div>
-        <h1>${title}</h1>
-        <p class="hero-subtext">Savor exquisite gourmet dishes crafted with fresh organic ingredients by world-class chefs.</p>
-        <div class="hero-cta-group">
-          <button class="primary-btn" onclick="handleAction('Book Table')">Reserve Table <i class="fas fa-utensils"></i></button>
-          <button class="secondary-btn" onclick="handleAction('View Menu')">Browse Menu</button>
-        </div>
-      `;
-    } else if (lower.includes('portfolio') || lower.includes('developer') || lower.includes('designer')) {
-      navLinks = `<a href="#about">About</a><a href="#projects">Work</a><a href="#skills">Skills</a><a href="#contact" class="nav-btn">Hire Me</a>`;
-      heroContent = `
-        <div class="badge-tag">🚀 Full-Stack Specialist</div>
-        <h1>Hello, I'm <span class="highlight-text">Alex Vance</span></h1>
-        <p class="hero-subtext">Crafting beautiful user interfaces, scalable backend systems, and cutting-edge digital experiences.</p>
-        <div class="hero-cta-group">
-          <button class="primary-btn" onclick="handleAction('View Projects')">View My Work <i class="fas fa-briefcase"></i></button>
-          <button class="secondary-btn" onclick="handleAction('Download CV')">Download CV</button>
-        </div>
-      `;
-    } else if (lower.includes('hospital') || lower.includes('doctor') || lower.includes('medical')) {
-      navLinks = `<a href="#services">Services</a><a href="#doctors">Doctors</a><a href="#appointment" class="nav-btn">Book Appointment</a>`;
-      heroContent = `
-        <div class="badge-tag">🏥 24/7 Compassionate Care</div>
-        <h1>Your Health & Wellness First</h1>
-        <p class="hero-subtext">Advanced medical diagnostics, experienced specialist doctors, and comprehensive healthcare services.</p>
-        <div class="hero-cta-group">
-          <button class="primary-btn" onclick="handleAction('Book Appointment')">Schedule Appointment <i class="fas fa-calendar-check"></i></button>
-          <button class="secondary-btn" onclick="handleAction('Emergency Call')">Emergency 24/7</button>
-        </div>
-      `;
-    } else if (lower.includes('store') || lower.includes('shop') || lower.includes('ecommerce') || lower.includes('fashion')) {
-      navLinks = `<a href="#products">Products</a><a href="#categories">Categories</a><a href="#deals">Deals</a><a href="#cart" class="nav-btn">Cart (<span id="cart-count">0</span>)</a>`;
-      heroContent = `
-        <div class="badge-tag">🔥 New Season Arrival</div>
-        <h1>Discover Premium Quality Trends</h1>
-        <p class="hero-subtext">Upgrade your style with top-rated minimalist aesthetics, delivered fast to your doorstep.</p>
-        <div class="hero-cta-group">
-          <button class="primary-btn" onclick="handleAction('Shop Now')">Shop New Collection <i class="fas fa-shopping-bag"></i></button>
-          <button class="secondary-btn" onclick="handleAction('Offers')">Explore 30% Off Deals</button>
-        </div>
-      `;
-    }
-
+  /* ==========================================================================
+     1. FLIPKART E-COMMERCE CLONE
+     ========================================================================== */
+  buildFlipkartHTML(title) {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
+  <title>${title} - Online Shopping</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
+  <!-- Top Blue Header -->
   <header class="header">
-    <div class="container nav-box">
-      <a href="#" class="brand"><i class="fas fa-cube"></i> ${title}</a>
-      <nav class="nav-links">
-        ${navLinks}
-      </nav>
+    <div class="header-container">
+      <div class="brand-logo">
+        <a href="#">
+          <span class="logo-main">${title}</span>
+          <span class="logo-sub">Plus <i class="fas fa-plus"></i></span>
+        </a>
+      </div>
+      <div class="search-bar-wrap">
+        <input type="text" id="search-input" placeholder="Search for products, brands and more">
+        <button id="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="nav-links">
+        <button class="login-btn">Login</button>
+        <a href="#seller" class="nav-item">Become a Seller</a>
+        <a href="#more" class="nav-item">More <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+        <a href="#" class="nav-item cart-btn" id="open-cart-btn">
+          <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)
+        </a>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="container hero-grid">
-      <div class="hero-text-block">
-        ${heroContent}
-      </div>
-      <div class="hero-visual-card">
-        <div class="glass-window">
-          <div class="window-header">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="window-title">Live Preview Window</span>
-          </div>
-          <div class="window-body">
-            <div class="stat-row">
-              <div class="mini-stat">
-                <i class="fas fa-bolt"></i>
-                <div>
-                  <h4 id="counter-1">99.9%</h4>
-                  <p>Performance</p>
-                </div>
-              </div>
-              <div class="mini-stat">
-                <i class="fas fa-users"></i>
-                <div>
-                  <h4 id="counter-2">45.2K</h4>
-                  <p>Active Users</p>
-                </div>
-              </div>
-            </div>
-            <div class="code-snippet-box">
-              <code>// Generated dynamically with AI App Builder Free</code>
-              <br>
-              <code>const app = new AIApp({ liveStatus: true });</code>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Categories Bar -->
+  <div class="categories-bar">
+    <div class="cat-item"><img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=100" alt="Electronics"><span>Electronics</span></div>
+    <div class="cat-item"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=100" alt="Fashion"><span>Fashion</span></div>
+    <div class="cat-item"><img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=100" alt="Home"><span>Home</span></div>
+    <div class="cat-item"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=100" alt="Appliances"><span>Appliances</span></div>
+    <div class="cat-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100" alt="Gadgets"><span>Beauty & Toys</span></div>
+  </div>
+
+  <!-- Main Banner Slider -->
+  <div class="promo-banner">
+    <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=80" alt="Sale Offer" class="banner-img">
+    <div class="banner-text">
+      <h2>Big Billion Deals Live!</h2>
+      <p>Up to 70% Off on Top Gadgets & Apparel</p>
+    </div>
+  </div>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    <h3>Trending Products & Offers</h3>
+    <div class="products-grid" id="products-grid">
+      <!-- Injected by script -->
     </div>
   </section>
 
-  <!-- Features Grid -->
-  <section id="features" class="features-section">
-    <div class="container">
-      <div class="section-title">
-        <h2>Key Highlights & Capabilities</h2>
-        <p>Engineered for ultimate scalability, responsiveness, and performance.</p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-          <h3>AI Generation</h3>
-          <p>Instant smart layout generation tailored to your exact custom prompts and industry standards.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-mobile-screen"></i></div>
-          <h3>Fully Responsive</h3>
-          <p>Pixel-perfect display across Mobile, Tablet, and Ultra-wide Desktop viewports automatically.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-          <h3>Blazing Fast Speed</h3>
-          <p>Optimized DOM structure and CSS variables guaranteeing light-speed load times.</p>
-        </div>
-      </div>
+  <!-- Slide-out Shopping Cart Drawer -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h4>My Shopping Cart</h4>
+      <button class="close-cart" id="close-cart-btn">&times;</button>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <p>&copy; ${new Date().getFullYear()} ${title}. Built with AI App Builder Free.</p>
+    <div class="cart-items" id="cart-items-container">
+      <p style="color: #878787; text-align: center; margin-top: 2rem;">Your cart is empty.</p>
     </div>
-  </footer>
+    <div class="cart-footer">
+      <div class="cart-total">Total: ₹<span id="cart-total-price">0</span></div>
+      <button class="checkout-btn" onclick="checkoutOrder()">Proceed to Buy</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>`;
   }
 
-  buildCSS(prompt, builderType) {
-    return `/* Custom CSS for Generated App */
+  buildFlipkartCSS() {
+    return `/* Flipkart CSS styling */
 :root {
-  --primary-bg: #090d16;
-  --card-bg: rgba(15, 23, 42, 0.75);
-  --accent-color: #6366f1;
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border-glass: rgba(255, 255, 255, 0.12);
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --blue-primary: #2874f0;
+  --blue-dark: #1f5cb8;
+  --yellow-accent: #ffe500;
+  --bg-light: #f1f3f6;
+  --text-dark: #212121;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background-color: var(--primary-bg);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  line-height: 1.6;
-  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* Header */
 .header {
+  background-color: var(--blue-primary);
+  color: #fff;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(9, 13, 22, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-glass);
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.nav-box {
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 70px;
+  gap: 1.5rem;
+  padding: 0 1rem;
 }
 
-.brand {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text-main);
+.brand-logo a {
   text-decoration: none;
+  color: #fff;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
 }
 
-.brand i { color: var(--accent-color); }
+.logo-main {
+  font-weight: 700;
+  font-size: 1.3rem;
+  font-style: italic;
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--yellow-accent);
+  font-style: italic;
+}
+
+.search-bar-wrap {
+  flex: 1;
+  display: flex;
+  background: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.search-bar-wrap input {
+  flex: 1;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search-bar-wrap button {
+  background: transparent;
+  border: none;
+  padding: 0 15px;
+  color: var(--blue-primary);
+  cursor: pointer;
+}
 
 .nav-links {
   display: flex;
@@ -359,223 +322,463 @@ body {
 }
 
 .nav-links a {
-  color: var(--text-muted);
+  color: #fff;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.login-btn {
+  background: #fff;
+  color: var(--blue-primary);
+  border: 1px solid #fff;
+  padding: 5px 25px;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
   font-size: 0.9rem;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
-.nav-links a:hover { color: var(--text-main); }
-
-.nav-btn {
-  background: var(--accent-gradient);
-  color: #fff !important;
-  padding: 0.5rem 1.2rem;
-  border-radius: 99px;
+.login-btn:hover {
+  background: var(--blue-dark);
+  color: #fff;
+  border-color: var(--blue-dark);
 }
 
-/* Hero Section */
-.hero-section {
-  padding: 5rem 0 4rem 0;
-  position: relative;
+/* Categories */
+.categories-bar {
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+.cat-item {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 
-.badge-tag {
-  display: inline-block;
-  padding: 0.35rem 0.85rem;
-  border-radius: 99px;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  color: #818cf8;
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+.cat-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 4px;
 }
 
-.hero-text-block h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 1.2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.cat-item span {
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.highlight-text {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Banner */
+.promo-banner {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+  height: 250px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.hero-subtext {
-  color: var(--text-muted);
-  font-size: 1.1rem;
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  color: #fff;
+  padding: 20px;
+}
+
+.banner-text h2 { margin: 0; }
+.banner-text p { margin: 5px 0 0 0; }
+
+/* Products Grid */
+.products-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.hero-cta-group {
+.product-card {
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+  padding: 10px;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
 }
 
-.primary-btn {
-  background: var(--accent-gradient);
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.prod-img {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 2px;
+}
+
+.prod-info {
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.prod-title { font-weight: 500; font-size: 0.95rem; margin: 0; }
+.prod-price { font-weight: 700; color: #388e3c; }
+
+.add-to-cart-btn {
+  background: #ff9f00;
   color: #fff;
   border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
+  padding: 8px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 2px;
+  margin-top: auto;
+  transition: background 0.2s;
 }
 
-.primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+.add-to-cart-btn:hover { background: #e68f00; }
+
+/* Cart Drawer */
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.25);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
 }
 
-.secondary-btn {
-  background: rgba(255, 255, 255, 0.06);
+.cart-drawer.active { right: 0; }
+
+.cart-header {
+  padding: 15px;
+  background: var(--blue-primary);
   color: #fff;
-  border: 1px solid var(--border-glass);
-  padding: 0.85rem 1.75rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h4 { margin: 0; }
+
+.close-cart {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-/* Glass Window Visual */
-.glass-window {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-glass);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-.window-header {
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid var(--border-glass);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot.red { background: #ef4444; }
-.dot.yellow { background: #f59e0b; }
-.dot.green { background: #10b981; }
-.window-title { margin-left: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
-
-.window-body { padding: 1.5rem; }
-
-.stat-row { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
-
-.mini-stat {
+.cart-items {
   flex: 1;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 1rem;
-  border-radius: 12px;
-  border: 1px solid var(--border-glass);
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.cart-item-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 10px;
 }
 
-.mini-stat i { font-size: 1.5rem; color: var(--accent-color); }
-.mini-stat h4 { font-size: 1.25rem; font-weight: 800; }
-.mini-stat p { font-size: 0.75rem; color: var(--text-muted); }
-
-.code-snippet-box {
-  background: #000;
-  padding: 1rem;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #a855f7;
+.cart-footer {
+  padding: 15px;
+  border-top: 1px solid #f0f0f0;
+  background: #fcfcfc;
 }
 
-/* Features */
-.features-section { padding: 4rem 0; }
-.section-title { text-align: center; margin-bottom: 3rem; }
-.section-title h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
-.section-title p { color: var(--text-muted); }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+.cart-total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-.feature-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-glass);
-  padding: 2rem;
-  border-radius: 16px;
-  transition: transform 0.2s;
+.checkout-btn {
+  width: 100%;
+  background: #fb641b;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 2px;
 }
 
-.feature-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
-
-.feature-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--accent-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  margin-bottom: 1.2rem;
-}
-
-.feature-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-.feature-card p { color: var(--text-muted); font-size: 0.9rem; }
-
-/* Footer */
-.footer { border-top: 1px solid var(--border-glass); padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
-
-@media (max-width: 768px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-text-block h1 { font-size: 2.2rem; }
-}
+.checkout-btn:hover { background: #e25814; }
 `;
   }
 
-  buildJS(prompt, builderType) {
-    return `// Dynamic JavaScript Controller for ${builderType}
+  buildFlipkartJS() {
+    return `// Flipkart interactive scripting
+const products = [
+  { id: 1, title: 'Realme Smart Watch X', price: 2999, img: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400' },
+  { id: 2, title: 'Premium Wireless Headphone', price: 1999, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400' },
+  { id: 3, title: 'Minimalist Leather Jacket', price: 4499, img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400' },
+  { id: 4, title: 'Ergonomic Office Chair', price: 8999, img: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=400' }
+];
+
+let cart = [];
+
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('AI App initialized successfully!');
+  renderProducts();
+
+  document.getElementById('open-cart-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('cart-drawer').classList.add('active');
+  });
+
+  document.getElementById('close-cart-btn').addEventListener('click', () => {
+    document.getElementById('cart-drawer').classList.remove('active');
+  });
 });
 
-function handleAction(actionName) {
-  alert('Action triggered: ' + actionName + '\\nThis app is live and interactive!');
+function renderProducts() {
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
+  
+  grid.innerHTML = products.map(p => \`
+    <div class="product-card">
+      <div class="prod-img" style="background-image: url('\${p.img}');"></div>
+      <div class="prod-info">
+        <h4 class="prod-title">\${p.title}</h4>
+        <span class="prod-price">₹\${p.price.toLocaleString()}</span>
+        <button class="add-to-cart-btn" onclick="addToCart(\${p.id})">Add to Cart</button>
+      </div>
+    </div>
+  \`).join('');
 }
 
-// Interactive Counter Animation Simulation
-let counter = 0;
-setInterval(() => {
-  const counterEl = document.getElementById('counter-1');
-  if (counterEl) {
-    counter = (counter + 0.1) % 100;
-    counterEl.innerText = counter > 99.5 ? '99.9%' : (99.0 + (counter % 0.9)).toFixed(1) + '%';
+function addToCart(productId) {
+  const prod = products.find(p => p.id === productId);
+  if (prod) {
+    cart.push(prod);
+    updateCartUI();
+    alert(prod.title + ' added to your shopping cart!');
   }
-}, 3000);
+}
+
+function updateCartUI() {
+  document.getElementById('cart-count').innerText = cart.length;
+  
+  const container = document.getElementById('cart-items-container');
+  if (!container) return;
+
+  if (cart.length === 0) {
+    container.innerHTML = \`<p style="color: #878787; text-align: center; margin-top: 2rem;">Your cart is empty.</p>\`;
+    document.getElementById('cart-total-price').innerText = '0';
+    return;
+  }
+
+  let total = 0;
+  container.innerHTML = cart.map((item, idx) => {
+    total += item.price;
+    return \`
+      <div class="cart-item-row">
+        <div>
+          <span style="font-size: 0.85rem; font-weight:500;">\${item.title}</span>
+          <br>
+          <span style="color:#388e3c; font-size: 0.8rem; font-weight:700;">₹\${item.price}</span>
+        </div>
+        <button style="border:none; background:none; color:red; cursor:pointer;" onclick="removeFromCart(\${idx})">&times;</button>
+      </div>
+    \`;
+  }).join('');
+
+  document.getElementById('cart-total-price').innerText = total.toLocaleString();
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
+}
+
+function checkoutOrder() {
+  if (cart.length === 0) {
+    alert('Your cart is empty.');
+    return;
+  }
+  alert('Thank you for your order! Simulated purchase successful.');
+  cart = [];
+  updateCartUI();
+  document.getElementById('cart-drawer').classList.remove('active');
+}
 `;
   }
+
+  /* ==========================================================================
+     2. LUXURY RESTAURANT SITE
+     ========================================================================== */
+  buildRestaurantHTML(title) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title} - Gourmet Bistro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #07070a; color: #f1f1f1; margin: 0; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    .hero { height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000') center; background-size: cover; }
+    .menu { max-width: 800px; margin: 3rem auto; padding: 0 1rem; }
+    .menu-item { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding: 1rem 0; }
+    .booking-form { max-width: 500px; margin: 3rem auto; padding: 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; }
+    .form-group { margin-bottom: 1rem; display:flex; flex-direction:column; gap:0.35rem; }
+    .form-group input, .form-group select { padding: 10px; border-radius: 4px; border: 1px solid #333; background: #111; color: #fff; }
+    .btn { background: #bfa37a; color: #fff; padding: 12px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; width: 100%; }
+    .btn:hover { background: #a68c65; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Welcome to ${title}</h1>
+    <p>A symphony of flavor and sensory culinary delight</p>
+  </div>
+  <div class="menu">
+    <h2>Our Culinary Specials</h2>
+    <div class="menu-item"><div><strong>Truffle Gnocchi</strong><br><small>Wild mushroom ragout, parmesan curls</small></div><div>₹1,250</div></div>
+    <div class="menu-item"><div><strong>Pan Seared Salmon</strong><br><small>Asparagus tips, lemon saffron butter</small></div><div>₹1,450</div></div>
+    <div class="menu-item"><div><strong>Slow Cooked Lamb Shank</strong><br><small>Rosemary mash, red wine reduction</small></div><div>₹1,850</div></div>
+  </div>
+  <div class="booking-form">
+    <h3>Book a Dining Table</h3>
+    <form id="reservation-form">
+      <div class="form-group"><label>Date</label><input type="date" required></div>
+      <div class="form-group"><label>Time Slot</label><select><option>7:00 PM</option><option>8:30 PM</option><option>10:00 PM</option></select></div>
+      <div class="form-group"><label>Guests</label><input type="number" min="1" max="10" value="2"></div>
+      <button class="btn" type="submit">Submit Reservation</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('reservation-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Reservation received! We look forward to hosting you.');
+    });
+  </script>
+</body>
+</html>`;
+  }
+  buildRestaurantCSS() { return ``; }
+  buildRestaurantJS() { return ``; }
+
+  /* ==========================================================================
+     3. DEVELOPER PORTFOLIO
+     ========================================================================== */
+  buildPortfolioHTML(title) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title} - Designer & Developer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0d0f14; color: #fff; margin: 0; padding: 2rem 0; }
+    .container { max-width: 750px; margin: 0 auto; padding: 0 1rem; }
+    header { text-align: center; margin-bottom: 3rem; }
+    h1 { font-size: 2.5rem; background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 1.5rem; }
+    .card h3 { margin-top: 0; color: #22d3ee; }
+    .contact-form { margin-top: 3rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+    .form-group input, .form-group textarea { padding: 10px; background: #161a22; border: 1px solid #333; color: #fff; border-radius: 4px; }
+    .btn { background: #a855f7; color: #fff; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+    .btn:hover { background: #9333ea; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Hi, I'm ${title}</h1>
+      <p>Building beautiful interactive user experiences & web portals</p>
+    </header>
+    <h2>Projects Showcase</h2>
+    <div class="grid">
+      <div class="card"><h3>AI Analytics Dashboard</h3><p>Full stack SaaS application using React & ChartJS.</p></div>
+      <div class="card"><h3>Crypto Pay System</h3><p>Blockchain integration portal for seamless payments.</p></div>
+    </div>
+    <div class="contact-form">
+      <h2>Let's Connect</h2>
+      <form id="contact-form">
+        <div class="form-group"><label>Email</label><input type="email" required></div>
+        <div class="form-group"><label>Message</label><textarea rows="4" required></textarea></div>
+        <button class="btn" type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Message sent! I will get back to you shortly.');
+    });
+  </script>
+</body>
+</html>`;
+  }
+  buildPortfolioCSS() { return ``; }
+  buildPortfolioJS() { return ``; }
+
+  /* ==========================================================================
+     4. GENERIC SAAS LANDING PAGE (DEFAULT FALLBACK)
+     ========================================================================== */
+  buildLandingHTML(title) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title} - Automated Growth Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: sans-serif; background: #090d16; color: #e2e8f0; text-align: center; margin: 0; padding: 4rem 1rem; }
+    h1 { font-size: 3rem; color: #fff; margin-bottom: 0.5rem; }
+    p { color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto; }
+    .btn { background: #3b82f6; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>${title}</h1>
+  <p>Automate your tasks, build databases, and generate layouts effortlessly in one interface.</p>
+  <a href="#" class="btn" onclick="alert('Started!')">Get Started Free</a>
+</body>
+</html>`;
+  }
+  buildLandingCSS() { return ``; }
+  buildLandingJS() { return ``; }
 }
