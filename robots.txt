@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aiappbuilderfree.com/sitemap.xml
+# Sitemap Location
+Sitemap: https://ai-app-builder-three.vercel.app/sitemap.xml
