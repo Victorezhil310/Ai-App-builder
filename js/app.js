@@ -49,8 +49,8 @@ class AppController {
     this.setupModals();
     this.updateUserUI();
 
-    // Initial default generation so AI Builder isn't blank
-    await this.triggerAIGeneration('Create a modern AI App Builder landing page with dark glassmorphism design');
+    // Default Placeholder iframe page so it looks completely clean on start
+    this.loadDefaultSandbox();
   }
 
   /**
@@ -72,6 +72,75 @@ class AppController {
     } catch (e) {
       console.warn('Cache cleanup non-critical warning:', e);
     }
+  }
+
+  /**
+   * Load clean starter page into preview instead of auto-generating layouts on startup
+   */
+  loadDefaultSandbox() {
+    const placeholderHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to AI App Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #090d16;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h1 {
+      margin-top: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 99px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">🚀 WORKSPACE INITIALIZED</div>
+    <h1>AI App Builder Sandbox</h1>
+    <p>Describe your app or website in the prompt area on the left side, then click <strong>"Generate Project"</strong> to build and preview your custom app instantly!</p>
+  </div>
+</body>
+</html>`;
+    
+    this.preview.updatePreview(placeholderHTML, '', '');
+    this.codeEditor.setFiles({ html: placeholderHTML, css: '', js: '' });
   }
 
   /* --------------------------------------------------------------------------
@@ -97,6 +166,21 @@ class AppController {
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');
     });
+
+    // Check Admin authorization panel toggle
+    if (viewId === 'admin') {
+      const isAuth = sessionStorage.getItem('admin_authenticated') === 'true';
+      const lockScreen = document.getElementById('admin-lock-screen');
+      const adminContent = document.getElementById('admin-dashboard-content');
+
+      if (isAuth) {
+        if (lockScreen) lockScreen.style.display = 'none';
+        if (adminContent) adminContent.style.display = 'block';
+      } else {
+        if (lockScreen) lockScreen.style.display = 'block';
+        if (adminContent) adminContent.style.display = 'none';
+      }
+    }
 
     // Activate target section & link
     const targetSection = document.getElementById(`view-${viewId}`);
@@ -535,11 +619,54 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     5. ADMIN DASHBOARD
+     5. ADMIN DASHBOARD & PIN AUTHENTICATION
      -------------------------------------------------------------------------- */
   setupAdminView() {
     this.renderAdminStats();
     this.renderAdminUsers();
+
+    const pinInput = document.getElementById('admin-pin-input');
+    const unlockBtn = document.getElementById('admin-unlock-btn');
+    const lockBtn = document.getElementById('admin-lock-btn');
+
+    const lockScreen = document.getElementById('admin-lock-screen');
+    const adminContent = document.getElementById('admin-dashboard-content');
+
+    // Unlock Admin Console via PIN "20032004"
+    if (unlockBtn) {
+      unlockBtn.addEventListener('click', () => {
+        const pin = pinInput ? pinInput.value.trim() : '';
+        if (pin === '20032004') {
+          sessionStorage.setItem('admin_authenticated', 'true');
+          
+          if (lockScreen) lockScreen.style.display = 'none';
+          if (adminContent) adminContent.style.display = 'block';
+
+          // Unlock Pro plan features for free!
+          this.paymentManager.subscription.plan = 'Business';
+          this.paymentManager.subscription.unlimitedExports = true;
+          this.paymentManager.subscription.maxProjects = 999999;
+          this.paymentManager.saveSubscription();
+
+          this.updateUserUI();
+          this.toast.success('🔓 Master Console unlocked. Free developer permissions granted!');
+          
+          if (pinInput) pinInput.value = '';
+        } else {
+          this.toast.error('❌ Access Denied. Invalid master authorization PIN.');
+        }
+      });
+    }
+
+    // Re-lock console
+    if (lockBtn) {
+      lockBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('admin_authenticated');
+        if (lockScreen) lockScreen.style.display = 'block';
+        if (adminContent) adminContent.style.display = 'none';
+        this.toast.warning('🔒 Master Admin Console locked.');
+      });
+    }
   }
 
   renderAdminStats() {
@@ -670,6 +797,17 @@ class AppController {
         const modal = e.target.closest('.modal-overlay');
         if (modal) modal.classList.remove('active');
       });
+    });
+
+    // Privacy & Terms Footer Triggers
+    document.getElementById('footer-privacy-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('privacy-modal')?.classList.add('active');
+    });
+
+    document.getElementById('footer-terms-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('terms-modal')?.classList.add('active');
     });
 
     // Deploy modal trigger
