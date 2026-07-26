@@ -47,11 +47,10 @@ class AppController {
     this.setupPricingView();
     this.setupDonationView();
     this.setupModals();
-    this.setupSpacesDropdown();
     this.updateUserUI();
 
     // Initial default generation so AI Builder isn't blank
-    await this.triggerAIGeneration('Create a modern AI App Builder Free landing page with dark glassmorphism design');
+    await this.triggerAIGeneration('Create a modern AI App Builder landing page with dark glassmorphism design');
   }
 
   /**
@@ -94,38 +93,27 @@ class AppController {
       sec.classList.remove('active');
     });
 
-    // Activate target section
+    // Deactivate header links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+
+    // Activate target section & link
     const targetSection = document.getElementById(`view-${viewId}`);
     if (targetSection) {
       targetSection.classList.add('active');
     }
 
-    // Scroll to top smoothly
+    const activeLink = document.querySelector(`.nav-link[data-view="${viewId}"]`);
+    if (activeLink) {
+      activeLink.classList.add('active');
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /* --------------------------------------------------------------------------
-     2. SPACES DROPDOWN
-     -------------------------------------------------------------------------- */
-  setupSpacesDropdown() {
-    const trigger = document.querySelector('.dropdown-trigger');
-    const menu = document.querySelector('.dropdown-menu');
-
-    if (trigger && menu) {
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShown = menu.style.display === 'block';
-        menu.style.display = isShown ? 'none' : 'block';
-      });
-
-      document.addEventListener('click', () => {
-        menu.style.display = 'none';
-      });
-    }
-  }
-
-  /* --------------------------------------------------------------------------
-     3. AI BUILDER WORKSPACE
+     2. AI BUILDER WORKSPACE
      -------------------------------------------------------------------------- */
   setupBuilderView() {
     this.preview = new PreviewManager('live-preview-iframe');
@@ -147,14 +135,13 @@ class AppController {
       }
     });
 
-    // Builder Type Selector buttons
-    document.querySelectorAll('.builder-type-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.builder-type-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.currentBuilderType = btn.dataset.type;
+    // Dropdown builder type selector
+    const typeDropdown = document.getElementById('builder-type-dropdown');
+    if (typeDropdown) {
+      typeDropdown.addEventListener('change', () => {
+        this.currentBuilderType = typeDropdown.value;
       });
-    });
+    }
 
     // Prompt Submit Form
     const generateBtn = document.getElementById('generate-ai-btn');
@@ -181,15 +168,6 @@ class AppController {
       });
     }
 
-    // Suggested Chips
-    document.querySelectorAll('.suggested-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        if (promptInput) {
-          promptInput.value = chip.dataset.prompt || chip.innerText;
-        }
-      });
-    });
-
     // Viewport Toggles (Desktop, Tablet, Mobile)
     document.querySelectorAll('.viewport-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -197,7 +175,7 @@ class AppController {
       });
     });
 
-    // View Mode Tabs (Split, Preview, Code)
+    // View Mode Tabs (Preview, Code)
     document.querySelectorAll('.mode-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
@@ -210,17 +188,14 @@ class AppController {
         if (mode === 'preview') {
           if (previewContainer) previewContainer.style.display = 'flex';
           if (codePanel) codePanel.style.display = 'none';
-        } else if (mode === 'code') {
-          if (previewContainer) previewContainer.style.display = 'none';
-          if (codePanel) codePanel.style.display = 'flex';
         } else {
-          if (previewContainer) previewContainer.style.display = 'flex';
+          if (previewContainer) previewContainer.style.display = 'none';
           if (codePanel) codePanel.style.display = 'flex';
         }
       });
     });
 
-    // Export Dropdown actions
+    // Export ZIP action
     document.getElementById('export-zip-btn')?.addEventListener('click', () => {
       if (this.currentProject) {
         this.exportManager.downloadZip(this.currentProject.files, this.currentProject.title);
@@ -247,28 +222,24 @@ class AppController {
   }
 
   async triggerAIGeneration(promptText) {
-    const loader = document.getElementById('landing-ai-loader');
-    const progressBar = document.getElementById('loader-progress-bar');
-    const progressText = document.getElementById('loader-progress-text');
+    const progressContainer = document.getElementById('builder-progress-container');
+    const progressBar = document.getElementById('ai-progress-fill');
     
-    if (loader) loader.style.display = 'flex';
+    if (progressContainer) progressContainer.style.display = 'block';
     if (progressBar) progressBar.style.width = '0%';
-    if (progressText) progressText.innerText = 'Analyzing prompt requirements...';
     
-    this.addConsoleLog(`[system] Initiating new compile based on prompt: "${promptText.substring(0, 40)}..."`, 'info');
+    this.addConsoleLog(`[system] Initiating project build: "${promptText.substring(0, 40)}..."`, 'info');
     
     const steps = [
       { p: 15, t: 'Parsing tokens and requirements...' },
-      { p: 40, t: 'Synthesizing layout structure (index.html)...' },
-      { p: 70, t: 'Generating custom glassmorphism stylesheet (style.css)...' },
-      { p: 90, t: 'Verifying interactive scripts (script.js)...' },
-      { p: 100, t: 'Compiling project package files...' }
+      { p: 45, t: 'Synthesizing layout structure (index.html)...' },
+      { p: 75, t: 'Generating custom glassmorphism stylesheet (style.css)...' },
+      { p: 95, t: 'Compiling project package files...' }
     ];
 
     for (const step of steps) {
-      await new Promise(r => setTimeout(r, 300));
+      await new Promise(r => setTimeout(r, 200));
       if (progressBar) progressBar.style.width = `${step.p}%`;
-      if (progressText) progressText.innerText = step.t;
       this.addConsoleLog(`[compile] ${step.t}`, 'info');
     }
 
@@ -288,20 +259,18 @@ class AppController {
 
       this.preview.updatePreview(project.files['index.html'], project.files['style.css'], project.files['script.js']);
       this.codeEditor.setFiles(project.files);
-
-      const titleEl = document.getElementById('workspace-project-title');
-      if (titleEl) titleEl.innerHTML = `${project.title} <i class="fas fa-edit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;"></i>`;
       
-      this.toast.success(`🎉 Generated & Compiled "${project.title}" successfully!`);
+      this.toast.success(`🎉 Generated "${project.title}" successfully!`);
       this.addConsoleLog(`[success] Assembly finished. Preview loaded in sandbox.`, 'success');
       this.renderUserDashboard();
-      this.switchView('builder');
     } catch (e) {
       console.error(e);
       this.toast.error('AI synthesis failed.');
       this.addConsoleLog(`[error] Synthesis failed: ${e.message}`, 'error');
     } finally {
-      if (loader) loader.style.display = 'none';
+      if (progressContainer) {
+        setTimeout(() => { progressContainer.style.display = 'none'; }, 400);
+      }
     }
   }
 
@@ -321,7 +290,7 @@ class AppController {
     ];
 
     for (const log of steps) {
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise(r => setTimeout(r, 150));
       this.addConsoleLog(`[compile] ${log}`, 'info');
     }
 
@@ -387,7 +356,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     4. TEMPLATES LIBRARY VIEW (WITH REAL SEARCH)
+     3. TEMPLATES LIBRARY VIEW (WITH REAL SEARCH)
      -------------------------------------------------------------------------- */
   setupTemplatesView() {
     this.renderTemplates(TEMPLATES_DATA);
@@ -469,6 +438,7 @@ class AppController {
         if (tmpl) {
           const promptInput = document.getElementById('prompt-input');
           if (promptInput) promptInput.value = tmpl.prompt;
+          this.switchView('builder');
           await this.triggerAIGeneration(tmpl.prompt);
         }
       });
@@ -476,7 +446,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     5. USER DASHBOARD
+     4. USER DASHBOARD
      -------------------------------------------------------------------------- */
   setupDashboardView() {
     // Sidebar subviews toggling
@@ -510,6 +480,7 @@ class AppController {
         localStorage.setItem('netlify_api_key', netlifyVal);
 
         this.toast.success('Integration credentials saved locally.');
+        this.updateUserUI();
       });
     }
 
@@ -550,9 +521,6 @@ class AppController {
           this.codeEditor.setFiles(proj.files);
           this.switchView('builder');
           this.toast.info(`Loaded project "${proj.title}" into workspace.`);
-          
-          const titleEl = document.getElementById('workspace-project-title');
-          if (titleEl) titleEl.innerHTML = `${proj.title} <i class="fas fa-edit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;"></i>`;
         }
       });
     });
@@ -567,7 +535,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     6. ADMIN DASHBOARD
+     5. ADMIN DASHBOARD
      -------------------------------------------------------------------------- */
   setupAdminView() {
     this.renderAdminStats();
@@ -616,7 +584,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     7. PRICING & RAZORPAY PAYMENT
+     6. PRICING & RAZORPAY PAYMENT
      -------------------------------------------------------------------------- */
   setupPricingView() {
     const toggle = document.getElementById('billing-toggle');
@@ -649,7 +617,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     8. DONATIONS
+     7. DONATIONS
      -------------------------------------------------------------------------- */
   setupDonationView() {
     const copyBtn = document.getElementById('copy-upi-btn');
@@ -679,7 +647,7 @@ class AppController {
 
     document.getElementById('pay-donation-btn')?.addEventListener('click', () => {
       const amount = customInput ? customInput.value || 250 : 250;
-      this.donationManager.processDonation(amount, 'MeDo Supporter');
+      this.donationManager.processDonation(amount, 'AI App Builder Supporter');
 
       const modal = document.getElementById('thank-you-modal');
       if (modal) modal.classList.add('active');
@@ -694,7 +662,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     9. MODALS & DEPLOY ACTIONS
+     8. MODALS & DEPLOY ACTIONS
      -------------------------------------------------------------------------- */
   setupModals() {
     document.querySelectorAll('.modal-close, .close-modal-btn').forEach(btn => {
@@ -755,6 +723,20 @@ class AppController {
     if (badge) {
       badge.innerText = `${sub.plan} Plan`;
       badge.className = `badge ${sub.plan === 'Pro' ? 'badge-info' : sub.plan === 'Business' ? 'badge-primary' : 'badge-secondary'}`;
+    }
+
+    // Update API Key Connection badge
+    const apiBadge = document.getElementById('api-status-badge');
+    if (apiBadge) {
+      const gemini = localStorage.getItem('gemini_api_key');
+      const netlify = localStorage.getItem('netlify_api_key');
+      if (gemini || netlify) {
+        apiBadge.innerText = 'APIs Active';
+        apiBadge.className = 'badge badge-success';
+      } else {
+        apiBadge.innerText = 'APIs Offline';
+        apiBadge.className = 'badge badge-danger';
+      }
     }
   }
 }
