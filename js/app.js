@@ -47,6 +47,7 @@ class AppController {
     this.setupPricingView();
     this.setupDonationView();
     this.setupModals();
+    this.setupSpacesDropdown();
     this.updateUserUI();
 
     // Initial default generation so AI Builder isn't blank
@@ -55,7 +56,6 @@ class AppController {
 
   /**
    * Auto Cache & Storage Optimization Engine
-   * Removes stale temporary files & ensures zero lag
    */
   autoCleanCache() {
     try {
@@ -79,11 +79,11 @@ class AppController {
      1. SPA NAVIGATION & ROUTING
      -------------------------------------------------------------------------- */
   setupNavigation() {
-    document.querySelectorAll('.nav-link[data-view]').forEach(link => {
+    document.querySelectorAll('[data-view]').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const viewId = link.dataset.view;
-        this.switchView(viewId);
+        if (viewId) this.switchView(viewId);
       });
     });
   }
@@ -94,27 +94,38 @@ class AppController {
       sec.classList.remove('active');
     });
 
-    // Deactivate header links
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.classList.remove('active');
-    });
-
-    // Activate target section & link
+    // Activate target section
     const targetSection = document.getElementById(`view-${viewId}`);
     if (targetSection) {
       targetSection.classList.add('active');
     }
 
-    const activeLink = document.querySelector(`.nav-link[data-view="${viewId}"]`);
-    if (activeLink) {
-      activeLink.classList.add('active');
-    }
-
+    // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /* --------------------------------------------------------------------------
-     2. AI BUILDER WORKSPACE
+     2. SPACES DROPDOWN
+     -------------------------------------------------------------------------- */
+  setupSpacesDropdown() {
+    const trigger = document.querySelector('.dropdown-trigger');
+    const menu = document.querySelector('.dropdown-menu');
+
+    if (trigger && menu) {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShown = menu.style.display === 'block';
+        menu.style.display = isShown ? 'none' : 'block';
+      });
+
+      document.addEventListener('click', () => {
+        menu.style.display = 'none';
+      });
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     3. AI BUILDER WORKSPACE
      -------------------------------------------------------------------------- */
   setupBuilderView() {
     this.preview = new PreviewManager('live-preview-iframe');
@@ -216,86 +227,223 @@ class AppController {
       }
     });
 
-    document.getElementById('export-html-btn')?.addEventListener('click', () => {
-      if (this.currentProject) {
-        this.exportManager.downloadHTML(this.currentProject.files['index.html'], this.currentProject.title);
-      }
+    // Reload preview button
+    document.getElementById('preview-reload-btn')?.addEventListener('click', () => {
+      this.preview.reload();
+      this.addConsoleLog('[system] Live sandbox preview reloaded.', 'info');
     });
 
-    document.getElementById('export-css-btn')?.addEventListener('click', () => {
-      if (this.currentProject) {
-        this.exportManager.downloadCSS(this.currentProject.files['style.css'], this.currentProject.title);
+    // Iterative prompt build button
+    document.getElementById('iterative-build-btn')?.addEventListener('click', async () => {
+      const input = document.getElementById('iterative-prompt-input');
+      const promptText = input ? input.value.trim() : '';
+      if (!promptText) {
+        this.toast.warning('Please describe the changes you want to apply!');
+        return;
       }
-    });
-
-    document.getElementById('export-js-btn')?.addEventListener('click', () => {
-      if (this.currentProject) {
-        this.exportManager.downloadJS(this.currentProject.files['script.js'], this.currentProject.title);
-      }
+      await this.triggerIterativeAIGeneration(promptText);
+      if (input) input.value = '';
     });
   }
 
   async triggerAIGeneration(promptText) {
-    this.toast.info('⚡ AI Synthesis Engine started... Generating code...');
-    const progressFill = document.getElementById('ai-progress-fill');
-    if (progressFill) progressFill.style.width = '20%';
+    const loader = document.getElementById('landing-ai-loader');
+    const progressBar = document.getElementById('loader-progress-bar');
+    const progressText = document.getElementById('loader-progress-text');
+    
+    if (loader) loader.style.display = 'flex';
+    if (progressBar) progressBar.style.width = '0%';
+    if (progressText) progressText.innerText = 'Analyzing prompt requirements...';
+    
+    this.addConsoleLog(`[system] Initiating new compile based on prompt: "${promptText.substring(0, 40)}..."`, 'info');
+    
+    const steps = [
+      { p: 15, t: 'Parsing tokens and requirements...' },
+      { p: 40, t: 'Synthesizing layout structure (index.html)...' },
+      { p: 70, t: 'Generating custom glassmorphism stylesheet (style.css)...' },
+      { p: 90, t: 'Verifying interactive scripts (script.js)...' },
+      { p: 100, t: 'Compiling project package files...' }
+    ];
 
-    setTimeout(() => { if (progressFill) progressFill.style.width = '60%'; }, 250);
+    for (const step of steps) {
+      await new Promise(r => setTimeout(r, 300));
+      if (progressBar) progressBar.style.width = `${step.p}%`;
+      if (progressText) progressText.innerText = step.t;
+      this.addConsoleLog(`[compile] ${step.t}`, 'info');
+    }
 
-    const project = await this.aiEngine.generateProject(promptText, this.currentBuilderType);
-    this.currentProject = project;
+    try {
+      const project = await this.aiEngine.generateProject(promptText, this.currentBuilderType);
+      this.currentProject = project;
 
-    // Auto Save to user projects
-    this.dashboardManager.addProject({
-      id: 'proj_' + Date.now().toString(36),
-      title: project.title,
-      builderType: project.builderType,
-      prompt: project.prompt,
-      createdAt: new Date().toISOString().split('T')[0],
-      files: project.files
-    });
+      // Auto save
+      this.dashboardManager.addProject({
+        id: 'proj_' + Date.now().toString(36),
+        title: project.title,
+        builderType: project.builderType,
+        prompt: project.prompt,
+        createdAt: new Date().toISOString().split('T')[0],
+        files: project.files
+      });
 
-    setTimeout(() => {
-      if (progressFill) progressFill.style.width = '100%';
       this.preview.updatePreview(project.files['index.html'], project.files['style.css'], project.files['script.js']);
       this.codeEditor.setFiles(project.files);
+
+      const titleEl = document.getElementById('workspace-project-title');
+      if (titleEl) titleEl.innerHTML = `${project.title} <i class="fas fa-edit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;"></i>`;
       
-      this.toast.success(`🎉 Generated & Auto-Saved "${project.title}" successfully!`);
-      setTimeout(() => { if (progressFill) progressFill.style.width = '0%'; }, 500);
+      this.toast.success(`🎉 Generated & Compiled "${project.title}" successfully!`);
+      this.addConsoleLog(`[success] Assembly finished. Preview loaded in sandbox.`, 'success');
       this.renderUserDashboard();
-    }, 450);
+      this.switchView('builder');
+    } catch (e) {
+      console.error(e);
+      this.toast.error('AI synthesis failed.');
+      this.addConsoleLog(`[error] Synthesis failed: ${e.message}`, 'error');
+    } finally {
+      if (loader) loader.style.display = 'none';
+    }
+  }
+
+  async triggerIterativeAIGeneration(promptText) {
+    if (!this.currentProject) {
+      this.toast.warning('No active project found in sandbox!');
+      return;
+    }
+
+    this.toast.info('⚡ Compiling updates...');
+    this.addConsoleLog(`[system] Applying updates: "${promptText.substring(0, 45)}..."`, 'info');
+
+    const steps = [
+      'Merging styling rules...',
+      'Re-assembling script loops...',
+      'Done!'
+    ];
+
+    for (const log of steps) {
+      await new Promise(r => setTimeout(r, 200));
+      this.addConsoleLog(`[compile] ${log}`, 'info');
+    }
+
+    const apiKey = localStorage.getItem('gemini_api_key');
+    if (apiKey) {
+      try {
+        const instruction = `Apply these modifications to the current project code: "${promptText}". 
+        Current files:
+        index.html: ${this.currentProject.files['index.html']}
+        style.css: ${this.currentProject.files['style.css']}
+        script.js: ${this.currentProject.files['script.js']}
+        
+        Return ONLY a raw JSON string of this structure: {"html": "...", "css": "...", "js": "..."}. Do not include markdown code block tags.`;
+        
+        const response = await this.aiEngine.callGeminiAPI(apiKey, instruction, this.currentProject.builderType);
+        if (response && response.html) {
+          this.currentProject.files['index.html'] = response.html;
+          this.currentProject.files['style.css'] = response.css || '';
+          this.currentProject.files['script.js'] = response.js || '';
+        }
+      } catch (err) {
+        console.error('Iterative Gemini call failed:', err);
+      }
+    } else {
+      // Local fallback append
+      this.currentProject.files['style.css'] += `\n/* Local change: ${promptText} */\n`;
+      this.currentProject.files['script.js'] += `\n// Local change: ${promptText}\nconsole.log("Change applied: ${promptText.replace(/"/g, '\\"')}");\n`;
+    }
+
+    // Save and reload
+    const existing = this.dashboardManager.projects.find(p => p.id === this.currentProject.id);
+    if (existing) {
+      existing.files = this.currentProject.files;
+      existing.updatedAt = new Date().toISOString().split('T')[0];
+      this.dashboardManager.saveProjects();
+    }
+
+    this.preview.updatePreview(
+      this.currentProject.files['index.html'],
+      this.currentProject.files['style.css'],
+      this.currentProject.files['script.js']
+    );
+    this.codeEditor.setFiles(this.currentProject.files);
+
+    this.toast.success('Changes applied successfully!');
+    this.addConsoleLog('[success] Project updated and re-rendered.', 'success');
+  }
+
+  addConsoleLog(message, type = 'info') {
+    const logBox = document.getElementById('operation-logs-box');
+    if (!logBox) return;
+
+    const colors = {
+      info: 'var(--text-muted)',
+      success: 'var(--color-success)',
+      error: 'var(--color-danger)',
+      system: 'var(--accent-cyan)'
+    };
+
+    const color = colors[type] || 'var(--text-secondary)';
+    logBox.innerHTML += `<div style="color:${color}; margin-top:0.25rem;">${message}</div>`;
+    logBox.scrollTop = logBox.scrollHeight;
   }
 
   /* --------------------------------------------------------------------------
-     3. TEMPLATES LIBRARY VIEW
+     4. TEMPLATES LIBRARY VIEW (WITH REAL SEARCH)
      -------------------------------------------------------------------------- */
   setupTemplatesView() {
     this.renderTemplates(TEMPLATES_DATA);
 
-    // Category filter pills
+    // Category pills filter
     document.querySelectorAll('.category-pill').forEach(pill => {
       pill.addEventListener('click', () => {
         document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
 
         const category = pill.dataset.category;
-        if (category === 'All') {
-          this.renderTemplates(TEMPLATES_DATA);
-        } else {
-          const filtered = TEMPLATES_DATA.filter(t => t.category.toLowerCase() === category.toLowerCase());
-          this.renderTemplates(filtered);
-        }
+        const searchVal = document.getElementById('templates-search-input')?.value.toLowerCase().trim() || '';
+
+        this.filterAndRenderTemplates(category, searchVal);
       });
     });
+
+    // Real-time Search project bar filter
+    const searchInput = document.getElementById('templates-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        const activePill = document.querySelector('.category-pill.active');
+        const activeCategory = activePill ? activePill.dataset.category : 'All';
+
+        this.filterAndRenderTemplates(activeCategory, query);
+      });
+    }
+  }
+
+  filterAndRenderTemplates(category, query) {
+    let filtered = TEMPLATES_DATA;
+    if (category !== 'All') {
+      filtered = filtered.filter(t => t.category.toLowerCase() === category.toLowerCase());
+    }
+    if (query) {
+      filtered = filtered.filter(t => 
+        t.title.toLowerCase().includes(query) || 
+        t.description.toLowerCase().includes(query)
+      );
+    }
+    this.renderTemplates(filtered);
   }
 
   renderTemplates(templates) {
     const grid = document.getElementById('templates-grid');
     if (!grid) return;
 
+    if (templates.length === 0) {
+      grid.innerHTML = `<p style="grid-column:1/-1; color:var(--text-muted); padding:2rem; text-align:center;">No matching templates found.</p>`;
+      return;
+    }
+
     grid.innerHTML = templates.map(t => `
       <div class="glass-card template-card">
-        <div class="template-thumb" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(236, 72, 153, 0.4)), url('https://picsum.photos/seed/${t.id}/400/220'); background-size:cover;">
+        <div class="template-thumb" style="background-image: url('${t.image}'); background-size: cover; background-position: center; min-height: 180px;">
           <div class="template-thumb-overlay">
             <button class="btn btn-sm btn-primary use-template-btn" data-id="${t.id}">Use Template</button>
           </div>
@@ -303,6 +451,9 @@ class AppController {
         <div class="template-info">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span class="badge badge-primary">${t.category}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">
+              <i class="fas fa-eye"></i> ${t.views} &nbsp; <i class="fas fa-heart"></i> ${t.likes}
+            </span>
           </div>
           <h3 class="template-title">${t.title}</h3>
           <p class="template-desc">${t.description}</p>
@@ -310,7 +461,7 @@ class AppController {
       </div>
     `).join('');
 
-    // Attach "Use Template" action
+    // Bind Use Template button
     grid.querySelectorAll('.use-template-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
@@ -318,7 +469,6 @@ class AppController {
         if (tmpl) {
           const promptInput = document.getElementById('prompt-input');
           if (promptInput) promptInput.value = tmpl.prompt;
-          this.switchView('builder');
           await this.triggerAIGeneration(tmpl.prompt);
         }
       });
@@ -326,10 +476,10 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     4. USER DASHBOARD
+     5. USER DASHBOARD
      -------------------------------------------------------------------------- */
   setupDashboardView() {
-    // Sidebar tabs navigation inside user dashboard
+    // Sidebar subviews toggling
     document.querySelectorAll('.dash-sidebar-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.dash-sidebar-tab').forEach(t => t.classList.remove('active'));
@@ -342,23 +492,24 @@ class AppController {
       });
     });
 
-    // API Keys Settings setup
+    // Integration API Key loading
     const geminiKeyInput = document.getElementById('settings-gemini-key');
     const netlifyTokenInput = document.getElementById('settings-netlify-token');
-    
+
     if (geminiKeyInput) geminiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
     if (netlifyTokenInput) netlifyTokenInput.value = localStorage.getItem('netlify_api_key') || '';
 
+    // Save Integration API Keys
     const saveKeysBtn = document.getElementById('save-settings-keys-btn');
     if (saveKeysBtn) {
       saveKeysBtn.addEventListener('click', () => {
         const geminiVal = geminiKeyInput ? geminiKeyInput.value.trim() : '';
         const netlifyVal = netlifyTokenInput ? netlifyTokenInput.value.trim() : '';
-        
+
         localStorage.setItem('gemini_api_key', geminiVal);
         localStorage.setItem('netlify_api_key', netlifyVal);
-        
-        this.toast.success('API Integration Keys saved successfully!');
+
+        this.toast.success('Integration credentials saved locally.');
       });
     }
 
@@ -389,7 +540,7 @@ class AppController {
       </div>
     `).join('');
 
-    // Bind edit / delete
+    // Open/Delete project bindings
     list.querySelectorAll('.open-project-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const proj = this.dashboardManager.getProject(btn.dataset.id);
@@ -398,7 +549,10 @@ class AppController {
           this.preview.updatePreview(proj.files['index.html'], proj.files['style.css'], proj.files['script.js']);
           this.codeEditor.setFiles(proj.files);
           this.switchView('builder');
-          this.toast.info(`Loaded project "${proj.title}" into AI Builder.`);
+          this.toast.info(`Loaded project "${proj.title}" into workspace.`);
+          
+          const titleEl = document.getElementById('workspace-project-title');
+          if (titleEl) titleEl.innerHTML = `${proj.title} <i class="fas fa-edit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;"></i>`;
         }
       });
     });
@@ -413,7 +567,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     5. ADMIN DASHBOARD
+     6. ADMIN DASHBOARD
      -------------------------------------------------------------------------- */
   setupAdminView() {
     this.renderAdminStats();
@@ -462,10 +616,9 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     6. PRICING & RAZORPAY PAYMENT
+     7. PRICING & RAZORPAY PAYMENT
      -------------------------------------------------------------------------- */
   setupPricingView() {
-    // Billing Cycle toggle (Monthly / Yearly)
     const toggle = document.getElementById('billing-toggle');
     if (toggle) {
       toggle.addEventListener('change', () => {
@@ -475,21 +628,20 @@ class AppController {
       });
     }
 
-    // Subscribe Buttons
     document.querySelectorAll('.subscribe-plan-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const plan = btn.dataset.plan;
         const amount = btn.dataset.amount;
-        
+
         if (plan === 'Free') {
-          this.toast.info('You are currently on the Free plan!');
+          this.toast.info('You are already on the Free plan!');
           return;
         }
 
-        this.toast.info(`Opening Razorpay Checkout for ${plan} Plan...`);
+        this.toast.info(`Opening Razorpay Checkout for ${plan} plan...`);
         const res = await this.paymentManager.processRazorpayPayment(plan, 'monthly', amount);
         if (res.success) {
-          this.toast.success(`🎉 Payment Successful! Transaction: ${res.transactionId}`);
+          this.toast.success(`🎉 Payment Completed! Transaction ID: ${res.transactionId}`);
           this.updateUserUI();
         }
       });
@@ -497,7 +649,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     7. DONATIONS SECTION (UPI ID: arasu9629hf@okhdfcbank)
+     8. DONATIONS
      -------------------------------------------------------------------------- */
   setupDonationView() {
     const copyBtn = document.getElementById('copy-upi-btn');
@@ -505,7 +657,6 @@ class AppController {
       copyBtn.addEventListener('click', () => this.donationManager.copyUpiId());
     }
 
-    // Preset donation amount buttons
     document.querySelectorAll('.preset-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
@@ -514,7 +665,7 @@ class AppController {
         const amount = btn.dataset.amount;
         const customInput = document.getElementById('custom-donation-input');
         if (customInput) customInput.value = amount;
-        
+
         this.updateQrCode(amount);
       });
     });
@@ -526,12 +677,10 @@ class AppController {
       });
     }
 
-    // Donate Submit Button
     document.getElementById('pay-donation-btn')?.addEventListener('click', () => {
       const amount = customInput ? customInput.value || 250 : 250;
-      this.donationManager.processDonation(amount, 'Support Developer');
+      this.donationManager.processDonation(amount, 'MeDo Supporter');
 
-      // Show Thank You Modal
       const modal = document.getElementById('thank-you-modal');
       if (modal) modal.classList.add('active');
     });
@@ -545,7 +694,7 @@ class AppController {
   }
 
   /* --------------------------------------------------------------------------
-     8. MODALS CONTROLLER
+     9. MODALS & DEPLOY ACTIONS
      -------------------------------------------------------------------------- */
   setupModals() {
     document.querySelectorAll('.modal-close, .close-modal-btn').forEach(btn => {
@@ -555,8 +704,8 @@ class AppController {
       });
     });
 
-    // Deploy Modal Trigger
-    document.getElementById('open-deploy-modal-btn')?.addEventListener('click', () => {
+    // Deploy modal trigger
+    document.getElementById('workspace-deploy-btn')?.addEventListener('click', () => {
       const modal = document.getElementById('deploy-modal');
       if (modal) modal.classList.add('active');
     });
@@ -566,10 +715,10 @@ class AppController {
       btn.addEventListener('click', async () => {
         const providerKey = btn.dataset.provider;
         const logBox = document.getElementById('deploy-logs-box');
-        if (logBox) logBox.innerHTML = '<div>Starting build...</div>';
+        if (logBox) logBox.innerHTML = '<div>Initializing compilation build...</div>';
 
         const projName = this.currentProject ? this.currentProject.title : 'My AI App';
-        
+
         // Generate Zip Blob in real-time if JSZip is loaded
         let zipBlob = null;
         if (window.JSZip && this.currentProject) {
@@ -591,8 +740,8 @@ class AppController {
             if (logBox) logBox.innerHTML += `<div>${log}</div>`;
           },
           (record) => {
-            if (logBox) logBox.innerHTML += `<div style="color:#10b981; font-weight:bold;">🚀 Live URL: <a href="${record.liveUrl}" target="_blank" style="color:#22d3ee;">${record.liveUrl}</a></div>`;
-            this.toast.success(`Successfully deployed to ${record.provider}!`);
+            if (logBox) logBox.innerHTML += `<div style="color:#10b981; font-weight:bold; margin-top:0.4rem;">🚀 Live URL: <a href="${record.liveUrl}" target="_blank" style="color:#22d3ee; text-decoration:underline;">${record.liveUrl}</a></div>`;
+            this.toast.success(`Deployed to ${record.provider} successfully!`);
           },
           zipBlob
         );

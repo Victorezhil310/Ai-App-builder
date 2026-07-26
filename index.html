@@ -1,27 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta name="google-adsense-account" content="ca-pub-9747982919206794">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9747982919206794" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI App Builder Free - Build Websites & Apps with AI without Coding</title>
+  <title>MeDo - Build Websites & Apps with AI without Coding</title>
 
   <!-- Google AdSense Verification -->
   <meta name="google-adsense-account" content="ca-pub-9747982919206794">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9747982919206794" crossorigin="anonymous"></script>
 
   <!-- SEO Meta Tags -->
-  <meta name="description" content="AI App Builder Free allows anyone to build custom web applications, websites, portfolios, landing pages, blogs, and stores using AI prompts. Export ZIP, HTML, CSS, JS and deploy instantly.">
-  <meta name="keywords" content="AI App Builder Free, AI Website Builder, AI Landing Page Generator, No Code AI App Builder, Export HTML CSS JS, Vercel Netlify Deploy">
+  <meta name="description" content="MeDo allows anyone to build custom web applications, websites, portfolios, landing pages, blogs, and stores using AI prompts. Export ZIP, HTML, CSS, JS and deploy instantly.">
+  <meta name="keywords" content="MeDo, AI App Builder, AI Website Builder, AI Landing Page Generator, No Code AI App Builder, Export HTML CSS JS, Vercel Netlify Deploy">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="AI App Builder Free">
-
-  <!-- Open Graph / Social Media -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="AI App Builder Free - Build Websites & Apps with AI">
-  <meta property="og:description" content="Create websites, stores, and web apps with AI prompts in seconds. Free export to ZIP, HTML, CSS, JS.">
-  <meta property="og:image" content="https://picsum.photos/seed/aiappbuilder/1200/630">
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,24 +27,7 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/views.css">
 
-  <!-- Structured Data / JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "AI App Builder Free",
-    "operatingSystem": "Web",
-    "applicationCategory": "DeveloperApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "AI-powered web application builder for instant website and app generation."
-  }
-  </script>
-
-  <!-- JSZip Library for client-side ZIP downloads -->
+  <!-- JSZip Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
@@ -66,154 +40,184 @@
   </div>
 
   <div id="app">
-    <!-- Header Navigation -->
+    <!-- Header Navigation (MeDo style) -->
     <header class="main-header">
       <div class="container nav-container">
-        <a href="#" class="brand-logo">
-          <div class="brand-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-          <span>AI App Builder</span>
-          <span class="brand-badge">Free</span>
-        </a>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <a href="#" class="brand-logo" data-view="landing">
+            <div class="brand-icon" style="background:var(--accent-gradient);"><i class="fas fa-cube"></i></div>
+            <span style="font-weight: 800; font-size:1.3rem;">MeDo</span>
+          </a>
+          
+          <!-- Spaces Dropdown -->
+          <div class="dropdown-wrapper" style="position:relative;">
+            <button class="btn btn-sm btn-secondary dropdown-trigger" style="border-radius:var(--radius-sm); font-size:0.8rem; background:rgba(255,255,255,0.03);">
+              <i class="fas fa-user-circle"></i> Personal Space <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:0.3rem;"></i>
+            </button>
+            <div class="dropdown-menu glass-card-heavy" style="display:none; position:absolute; top:110%; left:0; min-width:200px; padding:0.5rem; border-radius:var(--radius-md); border:1px solid var(--border-glass); z-index:100;">
+              <a href="#" class="dropdown-item" style="display:block; padding:0.5rem 0.75rem; border-radius:var(--radius-sm); font-size:0.85rem;"><i class="fas fa-user"></i> Personal Space</a>
+              <a href="#" class="dropdown-item" style="display:block; padding:0.5rem 0.75rem; border-radius:var(--radius-sm); font-size:0.85rem; border-top:1px solid var(--border-color); color:var(--accent-cyan);"><i class="fas fa-plus"></i> Create New Team Space</a>
+            </div>
+          </div>
+        </div>
 
-        <!-- Desktop Links -->
-        <ul class="nav-links">
-          <li><a href="#" class="nav-link active" data-view="builder"><i class="fas fa-hammer"></i> AI Builder</a></li>
-          <li><a href="#" class="nav-link" data-view="templates"><i class="fas fa-layer-group"></i> Templates</a></li>
-          <li><a href="#" class="nav-link" data-view="dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
-          <li><a href="#" class="nav-link" data-view="admin"><i class="fas fa-user-shield"></i> Admin</a></li>
-          <li><a href="#" class="nav-link" data-view="pricing"><i class="fas fa-tags"></i> Pricing</a></li>
-          <li><a href="#" class="nav-link" data-view="donations" style="color: var(--accent-cyan); font-weight:700;"><i class="fas fa-heart"></i> Donate</a></li>
-        </ul>
-
-        <!-- Action Controls -->
+        <!-- Desktop Promotion Banners -->
         <div class="header-actions">
-          <span id="user-plan-badge" class="badge badge-secondary">Free Plan</span>
-          <button class="theme-toggle-btn" aria-label="Toggle Theme">
-            <i class="fas fa-sun"></i>
-          </button>
+          <a href="#" class="glow-pill" style="font-size:0.8rem; font-weight:700;"><i class="fas fa-bullhorn"></i> Earn Up to 30% with MeDo Affiliate Program</a>
+          <span class="badge badge-primary"><i class="fas fa-award"></i> #1 Product of the Day</span>
+          <button id="header-login-btn" class="btn btn-sm btn-secondary" style="background:rgba(255,255,255,0.05); font-weight:700; border-radius:var(--radius-sm);">Login</button>
+          <button class="theme-toggle-btn" aria-label="Toggle Theme"><i class="fas fa-sun"></i></button>
         </div>
       </div>
     </header>
 
     <!-- Main Views Container -->
-    <main class="main-content container">
+    <main class="main-content">
 
       <!-- ===================================================================
-           1. AI BUILDER VIEW
+           1. MeDo LANDING VIEW
            =================================================================== -->
-      <section id="view-builder" class="view-section active">
-        <div class="builder-layout">
-          <!-- Prompt Card -->
-          <div class="glass-card prompt-hero-card">
-            <div class="builder-type-selector">
-              <span style="font-size:0.85rem; color:var(--text-muted); align-self:center; font-weight:600;">Type:</span>
-              <button class="builder-type-btn active" data-type="App">AI App Builder</button>
-              <button class="builder-type-btn" data-type="Website">AI Website</button>
-              <button class="builder-type-btn" data-type="Landing Page">Landing Page</button>
-              <button class="builder-type-btn" data-type="Portfolio">Portfolio</button>
-              <button class="builder-type-btn" data-type="Blog">Blog</button>
-              <button class="builder-type-btn" data-type="Store">E-Commerce Store</button>
+      <section id="view-landing" class="view-section active">
+        <div class="container" style="max-width: 1100px; padding-top:2rem;">
+          
+          <!-- Hero Section -->
+          <div style="text-align:center; margin-bottom:3rem; position:relative;">
+            <div style="font-size: 1.1rem; font-weight:700; color:var(--text-muted);">MeDo - Build Your Dream Web App</div>
+            <h1 style="font-size: 3.5rem; font-weight:800; margin-top:0.5rem; line-height:1.15; letter-spacing:-0.03em;">
+              Prompt <span class="gradient-text">Your Next App</span>
+            </h1>
+            <p style="color:var(--text-secondary); max-width:550px; margin:1rem auto 2rem auto; font-size:1.1rem;">Describe what you want to create and watch our AI synthesize full-stack interactive code in real-time.</p>
+
+            <!-- Prompter Input Box -->
+            <div class="glass-card" style="max-width:720px; margin:0 auto; padding:1.25rem; text-align:left; border: 1px solid rgba(255,255,255,0.15); box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+              <textarea id="prompt-input" class="prompt-textarea" style="border:none; background:transparent; padding:0; width:100%; min-height:80px; font-size:1rem; outline:none; resize:none;" placeholder="Describe your idea... @ to quickly invoke a skill (Press Enter to build)"></textarea>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; border-top:1px solid var(--border-color); padding-top:0.75rem;">
+                <div style="display:flex; gap:0.5rem;">
+                  <button class="btn btn-sm btn-secondary" style="border-radius:var(--radius-sm); font-size:0.8rem; background:rgba(255,255,255,0.03);"><i class="fas fa-magic"></i> Fast Build</button>
+                  <button class="btn btn-sm btn-secondary" style="border-radius:var(--radius-sm); font-size:0.8rem; background:rgba(255,255,255,0.03);"><i class="fas fa-upload"></i> Upload</button>
+                  <button class="btn btn-sm btn-secondary" style="border-radius:var(--radius-sm); font-size:0.8rem; background:rgba(255,255,255,0.03);"><i class="fas fa-tools"></i> Skills</button>
+                </div>
+                <button id="generate-ai-btn" class="btn btn-primary" style="border-radius:var(--radius-sm); font-size:0.85rem; padding:0.5rem 1.25rem;"><i class="fas fa-play"></i> Generate</button>
+              </div>
             </div>
 
-            <div class="prompt-input-wrapper">
-              <textarea id="prompt-input" class="prompt-textarea" placeholder="Describe the website or web application you want to build in plain English... (e.g. Build a futuristic esports gaming portal with live stream cards and leaderboards)"></textarea>
-              <button id="generate-ai-btn" class="btn btn-primary btn-lg" style="height: initial;">
-                <i class="fas fa-sparkles"></i> Generate
-              </button>
-            </div>
-
-            <!-- Progress Indicator Bar -->
-            <div class="progress-bar-wrap">
-              <div id="ai-progress-fill" class="progress-bar-fill"></div>
-            </div>
-
-            <div class="suggested-prompts">
-              <span>Try:</span>
-              <span class="suggested-chip" data-prompt="Build a SaaS startup landing page with animated feature breakdown and monthly pricing toggle">🚀 SaaS Startup Landing</span>
-              <span class="suggested-chip" data-prompt="Create a gourmet Italian restaurant site with online menu and table reservation form">🍷 Gourmet Bistro</span>
-              <span class="suggested-chip" data-prompt="Create a dark mode developer portfolio with project gallery and skill stats">💻 Tech Portfolio</span>
-              <span class="suggested-chip" data-prompt="Build an online fitness gym landing page with class timetable and membership pricing">🏋️ Fitness Club</span>
+            <!-- Loader Ring Overlay -->
+            <div id="landing-ai-loader" style="display:none; position:absolute; inset:0; background:rgba(9, 13, 22, 0.85); backdrop-filter:blur(6px); z-index:10; display:none; flex-direction:column; align-items:center; justify-content:center; border-radius:var(--radius-lg);">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">⚡🤖🍿</div>
+              <h2 style="font-weight:800;">Designing the application now, please hold on...</h2>
+              <p style="color:var(--text-cyan); font-weight:700; margin-top:0.5rem;" id="loader-progress-text">Hard at work...</p>
+              <div class="progress-bar-wrap" style="max-width:320px; margin-top:1rem; height:6px;">
+                <div id="loader-progress-bar" class="progress-bar-fill" style="width:0%;"></div>
+              </div>
             </div>
           </div>
 
-          <!-- Builder Workspace Header (Viewport, View Mode, Export, Deploy) -->
-          <div class="glass-card" style="padding:0; overflow:hidden;">
-            <div class="workspace-header">
-              <!-- Viewport selector -->
-              <div class="viewport-controls">
-                <button class="viewport-btn active" data-viewport="desktop"><i class="fas fa-desktop"></i> Desktop</button>
-                <button class="viewport-btn" data-viewport="tablet"><i class="fas fa-tablet-alt"></i> Tablet</button>
-                <button class="viewport-btn" data-viewport="mobile"><i class="fas fa-mobile-alt"></i> Mobile</button>
-              </div>
-
-              <!-- Split / Mode tabs -->
-              <div class="mode-tabs">
-                <button class="mode-tab active" data-mode="split">Split View</button>
-                <button class="mode-tab" data-mode="preview">Live Preview</button>
-                <button class="mode-tab" data-mode="code">Code Editor</button>
-              </div>
-
-              <!-- Export & Deploy Buttons -->
-              <div style="display:flex; gap:0.5rem;">
-                <div class="dropdown-wrapper" style="position:relative;">
-                  <button id="export-zip-btn" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i> Download ZIP</button>
-                </div>
-                <button id="open-deploy-modal-btn" class="btn btn-sm btn-cyan"><i class="fas fa-rocket"></i> Deploy</button>
-              </div>
+          <!-- Templates Section Filter Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1.5rem;">
+            <div class="category-pills" style="margin-top:0;">
+              <button class="category-pill active" data-category="All">Recommended</button>
+              <button class="category-pill" data-category="Education">Education</button>
+              <button class="category-pill" data-category="Website">Website</button>
+              <button class="category-pill" data-category="Marketing">Marketing</button>
+              <button class="category-pill" data-category="Portfolio">Portfolio</button>
+              <button class="category-pill" data-category="E-commerce">E-commerce</button>
+              <button class="category-pill" data-category="Games">Games</button>
             </div>
 
-            <!-- Workspace Split Panel (Left: Code Editor, Right: Preview) -->
-            <div class="builder-workspace">
-              <!-- Code Editor Panel (Left Side) -->
-              <div id="code-editor-panel" class="code-editor-panel">
-                <div class="code-tabs">
-                  <button class="code-tab active" data-lang="html"><i class="fab fa-html5"></i> index.html</button>
-                  <button class="code-tab" data-lang="css"><i class="fab fa-css3-alt"></i> style.css</button>
-                  <button class="code-tab" data-lang="js"><i class="fab fa-js"></i> script.js</button>
-                  <button id="copy-code-btn" class="btn btn-sm btn-outline" style="margin-left:auto; border:none; color:#8b949e;"><i class="fas fa-copy"></i> Copy</button>
-                </div>
-                <textarea class="code-textarea" spellcheck="false"></textarea>
-              </div>
-
-              <!-- Live Iframe Preview Panel (Right Side) -->
-              <div class="preview-container">
-                <iframe id="live-preview-iframe" class="preview-iframe viewport-desktop" title="Live Preview Sandbox"></iframe>
-              </div>
+            <!-- Search Panel -->
+            <div style="display:flex; align-items:center; gap:0.5rem; position:relative;">
+              <i class="fas fa-search" style="position:absolute; left:0.75rem; color:var(--text-muted); font-size:0.85rem;"></i>
+              <input id="templates-search-input" type="text" class="form-control" placeholder="Search project" style="padding-left:2.2rem; width:220px; font-size:0.85rem; height:34px; border-radius:var(--radius-sm);">
+              <button class="btn btn-sm btn-secondary" onclick="window.app.switchView('dashboard')" style="height:34px; border-radius:var(--radius-sm); font-weight:700; background:rgba(255,255,255,0.03);"><i class="fas fa-folder"></i> My Space</button>
             </div>
+          </div>
+
+          <!-- Template Cards Grid -->
+          <div id="templates-grid" class="templates-grid">
+            <!-- Dynamically populated -->
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           2. TEMPLATES LIBRARY VIEW (14 CATEGORIES)
+           2. MeDo BUILDER WORKSPACE VIEW
            =================================================================== -->
-      <section id="view-templates" class="view-section">
-        <div class="templates-header">
-          <div class="glow-pill"><i class="fas fa-shapes"></i> 14 Pre-Built Templates</div>
-          <h1 style="font-size: 2.2rem; font-weight:800; margin-top:0.5rem;">Explore Community Templates</h1>
-          <p style="color:var(--text-secondary); max-width:600px; margin:0 auto;">Launch production-ready designs instantly with one click into the AI Builder.</p>
-
-          <div class="category-pills">
-            <button class="category-pill active" data-category="All">All Categories</button>
-            <button class="category-pill" data-category="Portfolio">Portfolio</button>
-            <button class="category-pill" data-category="Restaurant">Restaurant</button>
-            <button class="category-pill" data-category="School">School</button>
-            <button class="category-pill" data-category="Hospital">Hospital</button>
-            <button class="category-pill" data-category="Hotel">Hotel</button>
-            <button class="category-pill" data-category="Shop">Shop</button>
-            <button class="category-pill" data-category="Gym">Gym</button>
-            <button class="category-pill" data-category="Gaming">Gaming</button>
-            <button class="category-pill" data-category="YouTube">YouTube</button>
-            <button class="category-pill" data-category="Startup">Startup</button>
-            <button class="category-pill" data-category="Real Estate">Real Estate</button>
-            <button class="category-pill" data-category="Blog">Blog</button>
-            <button class="category-pill" data-category="Business">Business</button>
-            <button class="category-pill" data-category="Ecommerce">Ecommerce</button>
+      <section id="view-builder" class="view-section">
+        <div class="container-fluid" style="padding:0;">
+          
+          <!-- Sub-Header Workspace Controls (Screenshot 1 Style) -->
+          <div class="glass-card" style="border-radius:0; border-left:none; border-right:none; border-top:none; padding:0.6rem 1.25rem; display:flex; justify-content:space-between; align-items:center; background:var(--bg-glass-heavy);">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <h2 id="workspace-project-title" style="font-size:1.05rem; font-weight:800; display:flex; align-items:center; gap:0.4rem;">
+                VictorAds Lite Rewards Platform <i class="fas fa-edit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;"></i>
+              </h2>
+              <span class="badge badge-secondary" style="font-size:0.7rem; padding:0.15rem 0.4rem;">v51 <i class="fas fa-chevron-down" style="font-size:0.6rem; margin-left:0.25rem;"></i></span>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="badge badge-info" style="font-weight:700; background:rgba(99,102,241,0.12); color:var(--accent-primary); border:1px solid rgba(99,102,241,0.2);"><i class="fas fa-coins"></i> 90 Credits</span>
+              <button class="btn btn-sm btn-secondary" style="border-radius:var(--radius-sm); font-weight:700;"><i class="fas fa-users"></i> Collaboration</button>
+              <button class="btn btn-sm btn-outline" style="border-radius:var(--radius-sm); font-weight:700;" onclick="window.app.switchView('landing')"><i class="fas fa-arrow-left"></i> Exit</button>
+              <button id="workspace-deploy-btn" class="btn btn-sm btn-cyan" style="border-radius:var(--radius-sm); font-weight:700;"><i class="fas fa-cloud-upload-alt"></i> Deploy</button>
+            </div>
           </div>
-        </div>
 
-        <div id="templates-grid" class="templates-grid">
-          <!-- Template cards dynamically injected here -->
+          <!-- Core Workspace Grid (Left Sidebar, Left Code Panel, Center Preview Panel, Right Operation Logs Panel) -->
+          <div style="display:flex; height:calc(100vh - 128px); min-height:550px;">
+            
+            <!-- Left Tool Sidebar (Width: 60px) -->
+            <div class="glass-card" style="width:60px; border-radius:0; border-top:none; border-bottom:none; border-left:none; display:flex; flex-direction:column; align-items:center; gap:1.25rem; padding:1.25rem 0; background:var(--bg-glass-heavy);">
+              <button class="btn-icon active" style="background:transparent; border:none; color:var(--accent-primary); font-size:1.15rem; cursor:pointer;" title="Files"><i class="fas fa-folder"></i></button>
+              <button class="btn-icon" style="background:transparent; border:none; color:var(--text-muted); font-size:1.15rem; cursor:pointer;" onclick="window.app.switchView('dashboard')" title="Database"><i class="fas fa-database"></i></button>
+              <button class="btn-icon" style="background:transparent; border:none; color:var(--text-muted); font-size:1.15rem; cursor:pointer;" onclick="window.app.switchView('pricing')" title="Billing"><i class="fas fa-crown"></i></button>
+              <button class="btn-icon" style="background:transparent; border:none; color:var(--text-muted); font-size:1.15rem; cursor:pointer;" onclick="window.app.switchView('donations')" title="Donate"><i class="fas fa-heart"></i></button>
+            </div>
+
+            <!-- Left Panel: Code Editor (Width: 35%) -->
+            <div id="code-editor-panel" class="code-editor-panel" style="width:35%; border-right:1px solid var(--border-color); display:flex; flex-direction:column;">
+              <div class="code-tabs" style="display:flex; background:rgba(0,0,0,0.2); border-bottom:1px solid var(--border-color);">
+                <button class="code-tab active" data-lang="html" style="font-size:0.8rem;"><i class="fab fa-html5"></i> index.html</button>
+                <button class="code-tab" data-lang="css" style="font-size:0.8rem;"><i class="fab fa-css3-alt"></i> style.css</button>
+                <button class="code-tab" data-lang="js" style="font-size:0.8rem;"><i class="fab fa-js"></i> script.js</button>
+                <button id="copy-code-btn" class="btn btn-sm btn-outline" style="margin-left:auto; border:none; font-size:0.75rem; color:var(--text-muted);"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <textarea class="code-textarea" spellcheck="false" style="flex:1; background:rgba(9, 13, 22, 0.7); border:none; resize:none; padding:1rem; font-family:var(--font-code); font-size:0.85rem; outline:none; color:var(--text-primary);"></textarea>
+            </div>
+
+            <!-- Center Panel: Live Preview Sandbox (Width: 43%) -->
+            <div class="preview-container" style="flex:1; display:flex; flex-direction:column; background:#000000; position:relative;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:0.4rem 1rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border-color);">
+                <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.75rem; color:var(--text-muted);">
+                  <i class="fas fa-globe"></i> <span>Home page</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <button class="viewport-btn active" data-viewport="desktop" style="background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fas fa-desktop"></i></button>
+                  <button class="viewport-btn" data-viewport="tablet" style="background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fas fa-tablet-alt"></i></button>
+                  <button class="viewport-btn" data-viewport="mobile" style="background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fas fa-mobile-alt"></i></button>
+                  <button id="preview-reload-btn" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; margin-left:0.5rem;"><i class="fas fa-sync-alt"></i></button>
+                </div>
+              </div>
+              <iframe id="live-preview-iframe" class="preview-iframe viewport-desktop" title="Sandbox Preview" style="width:100%; flex:1; border:none; background:#ffffff;"></iframe>
+            </div>
+
+            <!-- Right Panel: Operations Console Log & Iterative Prompter (Width: 22%) -->
+            <div class="glass-card" style="width:280px; border-radius:0; border-top:none; border-bottom:none; border-right:none; display:flex; flex-direction:column; background:var(--bg-glass-heavy);">
+              <!-- Top: Console Compile Logs -->
+              <div style="flex:1; padding:1rem; overflow-y:auto; font-family:var(--font-code); font-size:0.75rem; border-bottom:1px solid var(--border-color);" id="operation-logs-box">
+                <div style="color:var(--text-muted); font-weight:700; margin-bottom:0.5rem; text-transform:uppercase; font-size:0.65rem;">Operation Logs</div>
+                <div style="color:var(--accent-cyan);">[system] Workspace initialized.</div>
+                <div style="color:var(--color-success);">[synthesis] Code structures verified.</div>
+              </div>
+
+              <!-- Bottom: Iterative Prompting Form -->
+              <div style="padding:1rem; display:flex; flex-direction:column; gap:0.5rem; background:rgba(0,0,0,0.15);">
+                <div style="font-size:0.8rem; font-weight:700; color:var(--text-secondary);">Describe your changes</div>
+                <textarea id="iterative-prompt-input" class="form-control" style="font-size:0.85rem; min-height:60px; resize:none;" placeholder="Make header red, add team section..."></textarea>
+                <button id="iterative-build-btn" class="btn btn-primary btn-sm" style="border-radius:var(--radius-sm); font-weight:700;"><i class="fas fa-bolt"></i> Fast Build</button>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -221,127 +225,119 @@
            3. USER DASHBOARD VIEW
            =================================================================== -->
       <section id="view-dashboard" class="view-section">
-        <div class="dashboard-wrapper">
-          <!-- Sidebar -->
-          <div class="glass-card dashboard-sidebar">
-            <div class="dash-sidebar-tab sidebar-tab active" data-subview="projects"><i class="fas fa-folder-open"></i> My Projects</div>
-            <div class="dash-sidebar-tab sidebar-tab" data-subview="saved"><i class="fas fa-bookmark"></i> Saved Projects</div>
-            <div class="dash-sidebar-tab sidebar-tab" data-subview="deployments"><i class="fas fa-cloud-upload-alt"></i> Deployments</div>
-            <div class="dash-sidebar-tab sidebar-tab" data-subview="subscription"><i class="fas fa-crown"></i> Subscription</div>
-            <div class="dash-sidebar-tab sidebar-tab" data-subview="billing"><i class="fas fa-receipt"></i> Billing & Invoices</div>
-            <div class="dash-sidebar-tab sidebar-tab" data-subview="settings"><i class="fas fa-cog"></i> Settings</div>
-          </div>
-
-          <!-- Subview Content Area -->
-          <div class="glass-card" style="padding: 1.5rem;">
-            <!-- Subview: Projects -->
-            <div id="dash-subview-projects" class="dash-subview" style="display:block;">
-              <h2 style="margin-bottom: 1rem;">My AI Built Projects</h2>
-              <div id="user-projects-list" style="display:flex; flex-direction:column; gap:1rem;"></div>
+        <div class="container" style="max-width: 1000px; padding-top:1.5rem;">
+          <div class="dashboard-wrapper">
+            <!-- Sidebar -->
+            <div class="glass-card dashboard-sidebar">
+              <div class="dash-sidebar-tab sidebar-tab active" data-subview="projects"><i class="fas fa-folder-open"></i> My Projects</div>
+              <div class="dash-sidebar-tab sidebar-tab" data-subview="saved"><i class="fas fa-bookmark"></i> Saved Projects</div>
+              <div class="dash-sidebar-tab sidebar-tab" data-subview="deployments"><i class="fas fa-cloud-upload-alt"></i> Deployments</div>
+              <div class="dash-sidebar-tab sidebar-tab" data-subview="subscription"><i class="fas fa-crown"></i> Subscription</div>
+              <div class="dash-sidebar-tab sidebar-tab" data-subview="billing"><i class="fas fa-receipt"></i> Billing & Invoices</div>
+              <div class="dash-sidebar-tab sidebar-tab" data-subview="settings"><i class="fas fa-cog"></i> Settings</div>
             </div>
 
-            <!-- Subview: Saved -->
-            <div id="dash-subview-saved" class="dash-subview" style="display:none;">
-              <h2>Saved Templates</h2>
-              <p style="color:var(--text-muted); margin-top:0.5rem;">Bookmark your favorite community templates here for quick editing.</p>
-            </div>
-
-            <!-- Subview: Deployments -->
-            <div id="dash-subview-deployments" class="dash-subview" style="display:none;">
-              <h2>Active Deployments</h2>
-              <table class="data-table" style="margin-top:1rem;">
-                <thead>
-                  <tr>
-                    <th>Project</th>
-                    <th>Provider</th>
-                    <th>Live URL</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Developer Portfolio</td>
-                    <td>Vercel</td>
-                    <td><a href="#" style="color:var(--accent-cyan);">alex-portfolio.vercel.app</a></td>
-                    <td><span class="badge badge-success">Active</span></td>
-                  </tr>
-                  <tr>
-                    <td>Gourmet Bistro</td>
-                    <td>Netlify</td>
-                    <td><a href="#" style="color:var(--accent-cyan);">bistro-master.netlify.app</a></td>
-                    <td><span class="badge badge-success">Active</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Subview: Subscription -->
-            <div id="dash-subview-subscription" class="dash-subview" style="display:none;">
-              <h2>Current Plan Details</h2>
-              <div class="glass-card" style="padding: 1.5rem; margin-top:1rem;">
-                <h3>Pro Subscription</h3>
-                <p style="color:var(--text-muted);">Status: Active | Auto-renews: 2026-08-26</p>
-                <ul style="margin-top:1rem; padding-left:1.2rem; color:var(--text-secondary);">
-                  <li>Unlimited Projects & Exports</li>
-                  <li>Advanced AI Engine Synthesizer</li>
-                  <li>Custom Branding Removal</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Subview: Billing -->
-            <div id="dash-subview-billing" class="dash-subview" style="display:none;">
-              <h2>Billing History & Invoices</h2>
-              <table class="data-table" style="margin-top:1rem;">
-                <thead>
-                  <tr>
-                    <th>Invoice ID</th>
-                    <th>Date</th>
-                    <th>Plan</th>
-                    <th>Amount</th>
-                    <th>Invoice</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>INV-2026-9421</td>
-                    <td>2026-07-26</td>
-                    <td>Pro Subscription (Monthly)</td>
-                    <td>₹999</td>
-                    <td><button class="btn btn-sm btn-outline" onclick="window.app.paymentManager.downloadInvoice('INV-2026-9421')"><i class="fas fa-file-pdf"></i> View PDF</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Subview: Settings -->
-            <div id="dash-subview-settings" class="dash-subview" style="display:none;">
-              <h2>Integrations & API Settings</h2>
-              <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.25rem;">Enter your own developer API tokens to enable 100% real LLM generation and cloud hosting. Keys are stored locally on your device.</p>
-              
-              <div class="form-group">
-                <label class="form-label">Google Gemini API Key</label>
-                <input id="settings-gemini-key" type="password" class="form-control" placeholder="AIzaSy...">
+            <!-- Subview Content Area -->
+            <div class="glass-card" style="padding: 1.5rem; flex:1;">
+              <!-- Subview: Projects -->
+              <div id="dash-subview-projects" class="dash-subview" style="display:block;">
+                <h2 style="margin-bottom: 1rem;">My AI Built Projects</h2>
+                <div id="user-projects-list" style="display:flex; flex-direction:column; gap:1rem;"></div>
               </div>
 
-              <div class="form-group">
-                <label class="form-label">Netlify Personal Access Token (for real hosting)</label>
-                <input id="settings-netlify-token" type="password" class="form-control" placeholder="netlify_pat_...">
+              <!-- Subview: Saved -->
+              <div id="dash-subview-saved" class="dash-subview" style="display:none;">
+                <h2>Saved Templates</h2>
+                <p style="color:var(--text-muted); margin-top:0.5rem;">Bookmark your favorite community templates here for quick editing.</p>
               </div>
 
-              <button id="save-settings-keys-btn" class="btn btn-primary btn-sm" style="margin-top:0.5rem; margin-bottom:1.5rem;">Save API Integration Keys</button>
-
-              <h2>Account Preferences</h2>
-              <div class="form-group" style="margin-top:1rem;">
-                <label class="form-label">Default Export Format</label>
-                <select class="form-control">
-                  <option>ZIP Package (.zip)</option>
-                  <option>Standalone HTML Bundle (.html)</option>
-                </select>
+              <!-- Subview: Deployments -->
+              <div id="dash-subview-deployments" class="dash-subview" style="display:none;">
+                <h2>Active Deployments</h2>
+                <table class="data-table" style="margin-top:1rem;">
+                  <thead>
+                    <tr>
+                      <th>Project</th>
+                      <th>Provider</th>
+                      <th>Live URL</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Developer Portfolio</td>
+                      <td>Vercel</td>
+                      <td><a href="#" style="color:var(--accent-cyan);">alex-portfolio.vercel.app</a></td>
+                      <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div class="form-group">
-                <label class="form-label">Rate Limiting & Security Token</label>
-                <input class="form-control" value="sec_tok_99182310129381" readonly>
+
+              <!-- Subview: Subscription -->
+              <div id="dash-subview-subscription" class="dash-subview" style="display:none;">
+                <h2>Current Plan Details</h2>
+                <div class="glass-card" style="padding: 1.5rem; margin-top:1rem;">
+                  <h3>Pro Subscription</h3>
+                  <p style="color:var(--text-muted);">Status: Active | Auto-renews: 2026-08-26</p>
+                  <ul style="margin-top:1rem; padding-left:1.2rem; color:var(--text-secondary);">
+                    <li>Unlimited Projects & Exports</li>
+                    <li>Advanced AI Engine Synthesizer</li>
+                    <li>Custom Branding Removal</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Subview: Billing -->
+              <div id="dash-subview-billing" class="dash-subview" style="display:none;">
+                <h2>Billing History & Invoices</h2>
+                <table class="data-table" style="margin-top:1rem;">
+                  <thead>
+                    <tr>
+                      <th>Invoice ID</th>
+                      <th>Date</th>
+                      <th>Plan</th>
+                      <th>Amount</th>
+                      <th>Invoice</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>INV-2026-9421</td>
+                      <td>2026-07-26</td>
+                      <td>Pro Subscription (Monthly)</td>
+                      <td>₹999</td>
+                      <td><button class="btn btn-sm btn-outline" onclick="window.app.paymentManager.downloadInvoice('INV-2026-9421')"><i class="fas fa-file-pdf"></i> View PDF</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Subview: Settings -->
+              <div id="dash-subview-settings" class="dash-subview" style="display:none;">
+                <h2>Integrations & API Settings</h2>
+                <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.25rem;">Enter your own developer API tokens to enable 100% real LLM generation and cloud hosting. Keys are stored locally on your device.</p>
+                
+                <div class="form-group">
+                  <label class="form-label">Google Gemini API Key</label>
+                  <input id="settings-gemini-key" type="password" class="form-control" placeholder="AIzaSy...">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Netlify Personal Access Token (for real hosting)</label>
+                  <input id="settings-netlify-token" type="password" class="form-control" placeholder="netlify_pat_...">
+                </div>
+
+                <button id="save-settings-keys-btn" class="btn btn-primary btn-sm" style="margin-top:0.5rem; margin-bottom:1.5rem;">Save API Integration Keys</button>
+
+                <h2>Account Preferences</h2>
+                <div class="form-group" style="margin-top:1rem;">
+                  <label class="form-label">Default Export Format</label>
+                  <select class="form-control">
+                    <option>ZIP Package (.zip)</option>
+                    <option>Standalone HTML Bundle (.html)</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -352,125 +348,129 @@
            4. ADMIN DASHBOARD VIEW
            =================================================================== -->
       <section id="view-admin" class="view-section">
-        <div style="margin-bottom: 1.5rem;">
-          <div class="glow-pill"><i class="fas fa-shield-alt"></i> System Administration</div>
-          <h1 style="font-size: 2.2rem; font-weight:800; margin-top:0.5rem;">Admin Management & Metrics</h1>
-        </div>
+        <div class="container" style="max-width:1000px; padding-top:1.5rem;">
+          <div style="margin-bottom: 1.5rem;">
+            <div class="glow-pill"><i class="fas fa-shield-alt"></i> System Administration</div>
+            <h1 style="font-size: 2.2rem; font-weight:800; margin-top:0.5rem;">Admin Management & Metrics</h1>
+          </div>
 
-        <!-- Metric KPI Cards -->
-        <div class="stats-grid">
-          <div class="glass-card stat-card">
-            <span class="stat-label"><i class="fas fa-users"></i> Total Users</span>
-            <div id="stat-total-users" class="stat-val gradient-text">14,820</div>
+          <!-- Metric KPI Cards -->
+          <div class="stats-grid">
+            <div class="glass-card stat-card">
+              <span class="stat-label"><i class="fas fa-users"></i> Total Users</span>
+              <div id="stat-total-users" class="stat-val gradient-text">14,820</div>
+            </div>
+            <div class="glass-card stat-card">
+              <span class="stat-label"><i class="fas fa-user-check"></i> Active Users</span>
+              <div id="stat-active-users" class="stat-val gradient-text-cyan">9,340</div>
+            </div>
+            <div class="glass-card stat-card">
+              <span class="stat-label"><i class="fas fa-project-diagram"></i> Projects Created</span>
+              <div id="stat-total-projects" class="stat-val gradient-text-amber">42,150</div>
+            </div>
+            <div class="glass-card stat-card">
+              <span class="stat-label"><i class="fas fa-coins"></i> Monthly Revenue</span>
+              <div id="stat-revenue" class="stat-val gradient-text">₹2,84,500</div>
+            </div>
           </div>
-          <div class="glass-card stat-card">
-            <span class="stat-label"><i class="fas fa-user-check"></i> Active Users</span>
-            <div id="stat-active-users" class="stat-val gradient-text-cyan">9,340</div>
-          </div>
-          <div class="glass-card stat-card">
-            <span class="stat-label"><i class="fas fa-project-diagram"></i> Projects Created</span>
-            <div id="stat-total-projects" class="stat-val gradient-text-amber">42,150</div>
-          </div>
-          <div class="glass-card stat-card">
-            <span class="stat-label"><i class="fas fa-coins"></i> Monthly Revenue</span>
-            <div id="stat-revenue" class="stat-val gradient-text">₹2,84,500</div>
-          </div>
-        </div>
 
-        <!-- User Management Table -->
-        <div class="glass-card" style="padding:1.5rem; margin-top:1.5rem;">
-          <h3>Registered Users Management</h3>
-          <div class="data-table-container" style="margin-top:1rem;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Subscription</th>
-                  <th>Projects</th>
-                  <th>Status</th>
-                  <th>Joined</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-users-tbody">
-                <!-- User rows dynamically injected -->
-              </tbody>
-            </table>
+          <!-- User Management Table -->
+          <div class="glass-card" style="padding:1.5rem; margin-top:1.5rem;">
+            <h3>Registered Users Management</h3>
+            <div class="data-table-container" style="margin-top:1rem;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Subscription</th>
+                    <th>Projects</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-tbody">
+                  <!-- Injected dynamically -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           5. PRICING & SUBSCRIPTION VIEW
+           5. PRICING VIEW
            =================================================================== -->
       <section id="view-pricing" class="view-section">
-        <div style="text-align: center;">
-          <div class="glow-pill"><i class="fas fa-bolt"></i> Transparent Pricing</div>
-          <h1 style="font-size: 2.4rem; font-weight:800; margin-top:0.5rem;">Simple Plans for Everyone</h1>
-          <p style="color:var(--text-secondary);">Start free. Upgrade as your app needs scale.</p>
+        <div class="container" style="max-width:1000px; padding-top:1.5rem;">
+          <div style="text-align: center;">
+            <div class="glow-pill"><i class="fas fa-bolt"></i> Transparent Pricing</div>
+            <h1 style="font-size: 2.4rem; font-weight:800; margin-top:0.5rem;">Simple Plans for Everyone</h1>
+            <p style="color:var(--text-secondary);">Start free. Upgrade as your app needs scale.</p>
 
-          <!-- Billing Cycle Switch -->
-          <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem; margin-top:1.5rem;">
-            <span style="font-weight:600;">Monthly</span>
-            <label style="position:relative; display:inline-block; width:50px; height:26px;">
-              <input id="billing-toggle" type="checkbox" style="opacity:0; width:0; height:0;">
-              <span style="position:absolute; cursor:pointer; inset:0; background:#334155; border-radius:34px; transition:.4s;" onclick="this.previousElementSibling.click()"></span>
-            </label>
-            <span style="font-weight:600;">Yearly <span class="badge badge-success">Save 20%</span></span>
-          </div>
-        </div>
-
-        <div class="pricing-grid">
-          <!-- Free Plan -->
-          <div class="glass-card pricing-card">
-            <h3>Free Plan</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">For individuals testing ideas with AI.</p>
-            <div>
-              <span class="price-tag">₹0</span>
-              <span class="price-period">/ month</span>
+            <!-- Billing Cycle Switch -->
+            <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem; margin-top:1.5rem;">
+              <span style="font-weight:600;">Monthly</span>
+              <label style="position:relative; display:inline-block; width:50px; height:26px;">
+                <input id="billing-toggle" type="checkbox" style="opacity:0; width:0; height:0;">
+                <span style="position:absolute; cursor:pointer; inset:0; background:#334155; border-radius:34px; transition:.4s;" onclick="this.previousElementSibling.click()"></span>
+              </label>
+              <span style="font-weight:600;">Yearly <span class="badge badge-success">Save 20%</span></span>
             </div>
-            <ul class="pricing-features">
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> 3 Projects Limit</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Basic AI Code Synthesizer</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> 14 Community Templates</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Export ZIP, HTML, CSS, JS</li>
-            </ul>
-            <button class="btn btn-secondary subscribe-plan-btn" data-plan="Free" data-amount="0" style="margin-top:auto;">Current Plan</button>
           </div>
 
-          <!-- Pro Plan (Featured) -->
-          <div class="glass-card pricing-card featured">
-            <span class="badge badge-primary" style="align-self:flex-start;">MOST POPULAR</span>
-            <h3>Pro Subscription</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">For creators and developers needing power.</p>
-            <div>
-              <span id="pro-price" class="price-tag gradient-text">₹999</span>
-              <span class="price-period">/ month</span>
+          <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="glass-card pricing-card">
+              <h3>Free Plan</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem;">For individuals testing ideas with AI.</p>
+              <div>
+                <span class="price-tag">₹0</span>
+                <span class="price-period">/ month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> 3 Projects Limit</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Basic AI Code Synthesizer</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> 15 Community Templates</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Export ZIP, HTML, CSS, JS</li>
+              </ul>
+              <button class="btn btn-secondary subscribe-plan-btn" data-plan="Free" data-amount="0" style="margin-top:auto;">Current Plan</button>
             </div>
-            <ul class="pricing-features">
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Unlimited AI Projects</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Premium Advanced AI Engine</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Custom Branding Removal</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> 1-Click Multi-Cloud Deploy</li>
-            </ul>
-            <button class="btn btn-primary subscribe-plan-btn" data-plan="Pro" data-amount="999" style="margin-top:auto;">Upgrade to Pro</button>
-          </div>
 
-          <!-- Business Plan -->
-          <div class="glass-card pricing-card">
-            <h3>Business Plan</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">For agency teams & enterprise builds.</p>
-            <div>
-              <span id="business-price" class="price-tag">₹2,999</span>
-              <span class="price-period">/ month</span>
+            <!-- Pro Plan -->
+            <div class="glass-card pricing-card featured">
+              <span class="badge badge-primary" style="align-self:flex-start;">MOST POPULAR</span>
+              <h3>Pro Subscription</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem;">For creators and developers needing power.</p>
+              <div>
+                <span id="pro-price" class="price-tag gradient-text">₹999</span>
+                <span class="price-period">/ month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Unlimited AI Projects</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Premium Advanced AI Engine</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Custom Branding Removal</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> 1-Click Multi-Cloud Deploy</li>
+              </ul>
+              <button class="btn btn-primary subscribe-plan-btn" data-plan="Pro" data-amount="999" style="margin-top:auto;">Upgrade to Pro</button>
             </div>
-            <ul class="pricing-features">
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Team Workspace Access</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Dedicated API Access</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> White-Label Support</li>
-              <li><i class="fas fa-check" style="color:var(--color-success);"></i> Priority 24/7 Phone Support</li>
-            </ul>
-            <button class="btn btn-secondary subscribe-plan-btn" data-plan="Business" data-amount="2999" style="margin-top:auto;">Get Business</button>
+
+            <!-- Business Plan -->
+            <div class="glass-card pricing-card">
+              <h3>Business Plan</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem;">For agency teams & enterprise builds.</p>
+              <div>
+                <span id="business-price" class="price-tag">₹2,999</span>
+                <span class="price-period">/ month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Team Workspace Access</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Dedicated API Access</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> White-Label Support</li>
+                <li><i class="fas fa-check" style="color:var(--color-success);"></i> Priority 24/7 Phone Support</li>
+              </ul>
+              <button class="btn btn-secondary subscribe-plan-btn" data-plan="Business" data-amount="2999" style="margin-top:auto;">Get Business</button>
+            </div>
           </div>
         </div>
       </section>
@@ -479,41 +479,43 @@
            6. DONATIONS SECTION (SUPPORT THE DEVELOPER)
            =================================================================== -->
       <section id="view-donations" class="view-section">
-        <div class="glass-card donation-card">
-          <div class="glow-pill" style="align-self:center;"><i class="fas fa-heart" style="color:#ec4899;"></i> Support the Developer</div>
-          <h1 style="font-size: 2.2rem; font-weight:800;">Love AI App Builder Free?</h1>
-          <p style="color:var(--text-secondary);">If this tool helps you build apps & save coding time, consider donating to keep it free and support continuous development!</p>
+        <div class="container" style="max-width:1000px; padding-top:1.5rem;">
+          <div class="glass-card donation-card">
+            <div class="glow-pill" style="align-self:center;"><i class="fas fa-heart" style="color:#ec4899;"></i> Support the Developer</div>
+            <h1 style="font-size: 2.2rem; font-weight:800;">Love MeDo AI App Builder?</h1>
+            <p style="color:var(--text-secondary);">If this tool helps you build apps & save coding time, consider donating to keep it free and support continuous development!</p>
 
-          <!-- Highlight UPI ID -->
-          <div class="upi-highlight">
-            <i class="fas fa-qrcode"></i>
-            <span>UPI ID: <strong id="upi-id-text">arasu9629hf@okhdfcbank</strong></span>
-            <button id="copy-upi-btn" class="btn btn-sm btn-outline" style="border:none; color:var(--accent-cyan);"><i class="fas fa-copy"></i> Copy</button>
+            <!-- Highlight UPI ID -->
+            <div class="upi-highlight">
+              <i class="fas fa-qrcode"></i>
+              <span>UPI ID: <strong id="upi-id-text">arasu9629hf@okhdfcbank</strong></span>
+              <button id="copy-upi-btn" class="btn btn-sm btn-outline" style="border:none; color:var(--accent-cyan);"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+
+            <!-- Presets -->
+            <div class="preset-grid">
+              <button class="preset-btn" data-amount="50">₹50</button>
+              <button class="preset-btn" data-amount="100">₹100</button>
+              <button class="preset-btn active" data-amount="250">₹250</button>
+              <button class="preset-btn" data-amount="500">₹500</button>
+            </div>
+
+            <!-- Custom Amount Input -->
+            <div class="form-group" style="text-align:left;">
+              <label class="form-label">Custom Amount (INR ₹)</label>
+              <input id="custom-donation-input" type="number" class="form-control" value="250" placeholder="Enter amount in ₹">
+            </div>
+
+            <!-- QR Code Display -->
+            <div style="display:flex; flex-direction:column; align-items:center; gap:0.75rem;">
+              <img id="upi-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3Darasu9629hf%40okhdfcbank%26pn%3DMeDo%2520Developer%26am%3D250%26cu%3DINR" alt="UPI QR Code" style="width:180px; height:180px; border-radius:12px; border:2px solid var(--border-glass); padding:8px; background:#fff;">
+              <span style="font-size:0.8rem; color:var(--text-muted);">Scan with PhonePe, Google Pay, Paytm, or BHIM</span>
+            </div>
+
+            <button id="pay-donation-btn" class="btn btn-cyan btn-lg" style="margin-top:0.5rem;">
+              <i class="fas fa-heart"></i> Complete Donation & Say Thanks
+            </button>
           </div>
-
-          <!-- Presets (₹50, ₹100, ₹250, ₹500) -->
-          <div class="preset-grid">
-            <button class="preset-btn" data-amount="50">₹50</button>
-            <button class="preset-btn" data-amount="100">₹100</button>
-            <button class="preset-btn active" data-amount="250">₹250</button>
-            <button class="preset-btn" data-amount="500">₹500</button>
-          </div>
-
-          <!-- Custom Amount Input -->
-          <div class="form-group" style="text-align:left;">
-            <label class="form-label">Custom Amount (INR ₹)</label>
-            <input id="custom-donation-input" type="number" class="form-control" value="250" placeholder="Enter amount in ₹">
-          </div>
-
-          <!-- QR Code Display -->
-          <div style="display:flex; flex-direction:column; align-items:center; gap:0.75rem;">
-            <img id="upi-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3Darasu9629hf%40okhdfcbank%26pn%3DAI%2520App%2520Builder%26am%3D250%26cu%3DINR" alt="UPI QR Code" style="width:180px; height:180px; border-radius:12px; border:2px solid var(--border-glass); padding:8px; background:#fff;">
-            <span style="font-size:0.8rem; color:var(--text-muted);">Scan with PhonePe, Google Pay, Paytm, or BHIM</span>
-          </div>
-
-          <button id="pay-donation-btn" class="btn btn-cyan btn-lg" style="margin-top:0.5rem;">
-            <i class="fas fa-heart"></i> Complete Donation & Say Thanks
-          </button>
         </div>
       </section>
 
@@ -524,9 +526,9 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a href="#" class="brand-logo">
-              <div class="brand-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-              <span>AI App Builder</span>
+            <a href="#" class="brand-logo" data-view="landing">
+              <div class="brand-icon"><i class="fas fa-cube"></i></div>
+              <span>MeDo</span>
             </a>
             <p>Empowering creators worldwide to create web apps, websites, and landing pages instantly without writing code.</p>
           </div>
@@ -559,7 +561,7 @@
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; 2026 AI App Builder Free. All rights reserved.</p>
+          <p>&copy; 2026 MeDo AI App Builder. All rights reserved.</p>
           <p>UPI Support: <code>arasu9629hf@okhdfcbank</code></p>
         </div>
       </div>
@@ -607,7 +609,7 @@
       <div class="modal-body" style="padding:2rem;">
         <div style="font-size:3.5rem; margin-bottom:1rem;">🎉❤️🙏</div>
         <h2>Your Support Means Everything!</h2>
-        <p style="color:var(--text-secondary); margin-top:0.5rem;">Thank you for donating to <strong>arasu9629hf@okhdfcbank</strong>. Your contribution keeps AI App Builder Free alive and growing!</p>
+        <p style="color:var(--text-secondary); margin-top:0.5rem;">Thank you for donating to <strong>arasu9629hf@okhdfcbank</strong>. Your contribution keeps MeDo AI App Builder alive and growing!</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary close-modal-btn">You're Welcome!</button>

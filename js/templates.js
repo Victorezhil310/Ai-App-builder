@@ -1,118 +1,156 @@
 /* ==========================================================================
-   COMMUNITY TEMPLATES & CATEGORIES (14 CATEGORIES)
+   MEDO STYLE COMMUNITY TEMPLATES & CATEGORIES
    ========================================================================== */
 
 export const TEMPLATES_DATA = [
   {
-    id: 'portfolio-1',
+    id: 'bakery-newspaper',
+    category: 'Website',
+    title: 'Bakery newspaper website',
+    description: 'A vintage newspaper style editorial site for an artisanal bakery featuring daily specials.',
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80',
+    views: '2.2K',
+    likes: 247,
+    prompt: 'Build a vintage newspaper-themed bakery website with articles about bread-making, daily pastry menu, and reservation form.'
+  },
+  {
+    id: 'omakase-restaurant',
+    category: 'Website',
+    title: 'Omakase Restaurant Website',
+    description: 'High-end minimalist Japanese sushi bar online experience with reservation booker.',
+    image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&q=80',
+    views: '1.4K',
+    likes: 184,
+    prompt: 'Create a dark, ultra-minimalist Omakase sushi restaurant page with booking calendar and interactive chef bio.'
+  },
+  {
+    id: 'ceramics-studio',
+    category: 'Website',
+    title: 'Ceramics Studio Website',
+    description: 'Artisanal clay and pottery studio portfolio showcasing gallery collections and workshop slots.',
+    image: 'https://images.unsplash.com/photo-1565192647048-f997ded879f0?w=400&q=80',
+    views: '930',
+    likes: 124,
+    prompt: 'Design a serene, earth-toned website for a ceramics studio with a gallery grid, course calendar, and shop catalog.'
+  },
+  {
+    id: 'bespoke-joinery',
+    category: 'Website',
+    title: 'Bespoke Joinery Website',
+    description: 'Custom woodworking, cabinetry, and furniture craft showcase portfolio.',
+    image: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=400&q=80',
+    views: '780',
+    likes: 96,
+    prompt: 'Build a premium bespoke joinery and custom carpentry portfolio showing before/after work sliders and estimate requests.'
+  },
+  {
+    id: 'azulejo-restoration',
+    category: 'Website',
+    title: 'Azulejo Restoration Website',
+    description: 'Heritage Portuguese glazed tile conservation and restoration project showcase.',
+    image: 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=400&q=80',
+    views: '650',
+    likes: 82,
+    prompt: 'Build a website for Portuguese Azulejo tile restoration featuring historical timelines, restoration case studies, and contact forms.'
+  },
+  {
+    id: 'brazilian-motion',
+    category: 'Marketing',
+    title: 'Brazilian Motion Studio Site',
+    description: 'Energetic motion design studio layout featuring video showreel embeds.',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&q=80',
+    views: '1.1K',
+    likes: 153,
+    prompt: 'Create an energetic, high-contrast motion design agency landing page with color block cards and animated video showreel blocks.'
+  },
+  {
+    id: 'music-album',
+    category: 'Marketing',
+    title: 'Music Album Launch Website',
+    description: 'Interactive teaser landing page for a new audio release with audio sample playbars.',
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80',
+    views: '2.5K',
+    likes: 310,
+    prompt: 'Build an immersive audio album launch page with track snippets player, visual lyric scroll, and pre-save links.'
+  },
+  {
+    id: 'masp-field',
+    category: 'Education',
+    title: 'MASP Field Trip Website',
+    description: 'Educational art museum guide and field trip reservation portal.',
+    image: 'https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=400&q=80',
+    views: '410',
+    likes: 56,
+    prompt: 'Design an art museum field trip page with interactive exhibits list, study guide downloads, and student registration forms.'
+  },
+  {
+    id: 'newsletter-landing',
+    category: 'Marketing',
+    title: 'Newsletter Landing Page',
+    description: 'Minimalist high-converting landing page with email subscription focus.',
+    image: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=400&q=80',
+    views: '1.8K',
+    likes: 215,
+    prompt: 'Create a single-column newsletter landing page with a minimalist email subscription input, recent issue previews, and testimonials.'
+  },
+  {
+    id: 'vinyl-waitlist',
+    category: 'E-commerce',
+    title: 'Vinyl-style waitlist website',
+    description: 'Retro audio record theme early access waitlist page for collector clubs.',
+    image: 'https://images.unsplash.com/photo-1539625319135-8d6b9a885db1?w=400&q=80',
+    views: '1.3K',
+    likes: 167,
+    prompt: 'Build a retro record shop waitlist page with spinning vinyl animations, early access registration, and track preview widgets.'
+  },
+  {
+    id: 'portfolio-design',
     category: 'Portfolio',
-    title: 'Modern Developer & Designer Portfolio',
-    description: 'Sleek dark mode portfolio with hero section, project showcase grid, tech stack tags, and interactive contact form.',
-    tags: ['Glassmorphism', 'Responsive', 'Interactive'],
-    prompt: 'Create a modern developer portfolio website with a neon glassmorphism hero banner, project showcase cards with hover effects, skill progress bars, and a working contact form.'
+    title: 'Portfolio Website Design',
+    description: 'Clean visual grid portfolio for branding and product designers.',
+    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&q=80',
+    views: '3.1K',
+    likes: 412,
+    prompt: 'Design a visual designer portfolio with heavy grid cards, case study detail overlays, and design process highlights.'
   },
   {
-    id: 'restaurant-1',
-    category: 'Restaurant',
-    title: 'Gourmet Bistro & Online Reservations',
-    description: 'Luxury restaurant website featuring an interactive digital food menu, reservation booking form, and chef highlights.',
-    tags: ['Menu System', 'Table Booking', 'Gallery'],
-    prompt: 'Build a high-end restaurant landing page with food category tabs, interactive table booking modal, customer reviews slider, and contact details.'
+    id: 'retro-os',
+    category: 'Portfolio',
+    title: 'Retro OS Portfolio Website',
+    description: 'Nostalgic 90s operating system style portfolio with windows and draggable cards.',
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80',
+    views: '4.2K',
+    likes: 580,
+    prompt: 'Build a 95-style operating system desktop portfolio with draggable file windows, terminal console, and customizable theme settings.'
   },
   {
-    id: 'school-1',
-    category: 'School',
-    title: 'Apex Academy & Learning Hub',
-    description: 'Educational institute portal with course directory, admission inquiry form, notice board, and student portal preview.',
-    tags: ['Education', 'Courses', 'Admissions'],
-    prompt: 'Build a modern school and academy website featuring featured courses, faculty profiles, campus gallery, upcoming events list, and enrollment form.'
+    id: 'architecture-portfolio',
+    category: 'Portfolio',
+    title: 'Architecture Portfolio Website',
+    description: 'Monochrome, large-typography showcase for structural designers and architects.',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80',
+    views: '980',
+    likes: 110,
+    prompt: 'Build a bold structural architecture portfolio with monochrome styling, full-screen blueprint mockups, and client stories.'
   },
   {
-    id: 'hospital-1',
-    category: 'Hospital',
-    title: 'MediCare Health Center & Doctor Booking',
-    description: 'Healthcare portal with online appointment booking, doctor directory, emergency helpline banner, and department listings.',
-    tags: ['Healthcare', 'Doctor Booking', 'Services'],
-    prompt: 'Create a modern medical clinic website with online appointment scheduling, doctor department selector, patient testimonials, and emergency contact section.'
+    id: 'world-cup',
+    category: 'Games',
+    title: 'World Cup Prediction Game',
+    description: 'Interactive sports predictions scoreboard and leaderboard app.',
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400&q=80',
+    views: '5.8K',
+    likes: 720,
+    prompt: 'Create a World Cup brackets and scoreboard prediction portal with a global leaderboard database and live simulation.'
   },
   {
-    id: 'hotel-1',
-    category: 'Hotel',
-    title: 'Grand Azure Luxury Resort',
-    description: 'Boutique hotel & resort website with room availability search, suite showcase, amenities grid, and guest booking module.',
-    tags: ['Luxury Resort', 'Room Booking', 'Amenities'],
-    prompt: 'Design a luxury hotel website with room selection cards, date picker booking bar, virtual tour banner, and amenities section.'
-  },
-  {
-    id: 'shop-1',
-    category: 'Shop',
-    title: 'Urban Trend Fashion Boutique',
-    description: 'E-commerce fashion storefront with category filters, shopping cart drawer simulation, and product detail modals.',
-    tags: ['Storefront', 'Cart Drawer', 'Products'],
-    prompt: 'Create an e-commerce fashion shop with product filter tabs, interactive quick view modal, working cart counter, and promotional banners.'
-  },
-  {
-    id: 'gym-1',
-    category: 'Gym',
-    title: 'Pulse Fitness & Heavy Iron Gym',
-    description: 'High-energy fitness club site with workout class timetable, membership plan calculator, and trainer bios.',
-    tags: ['Fitness', 'Schedule', 'Pricing'],
-    prompt: 'Build an energetic gym landing page with workout class schedule table, BMI calculator widget, membership pricing cards, and trainer gallery.'
-  },
-  {
-    id: 'gaming-1',
-    category: 'Gaming',
-    title: 'CyberVerse Esports Community',
-    description: 'Futuristic gaming hub with live tournament listings, team rosters, Twitch stream embed area, and leaderboard.',
-    tags: ['Esports', 'Leaderboard', 'Tournaments'],
-    prompt: 'Create a futuristic cyberpunk gaming portal with live tournament schedule, team roster cards, video stream preview, and community join form.'
-  },
-  {
-    id: 'youtube-1',
-    category: 'YouTube',
-    title: 'Creator Studio & Video Showcase',
-    description: 'Dedicated web hub for YouTube creators with video gallery, merchandise store preview, and subscriber newsletter popup.',
-    tags: ['Content Creator', 'Video Player', 'Merch'],
-    prompt: 'Build a YouTube creator website with featured video player area, episode playlist grid, channel stats counters, and merch preview.'
-  },
-  {
-    id: 'startup-1',
-    category: 'Startup',
-    title: 'SaaSify AI Automation Platform',
-    description: 'Conversion-focused SaaS landing page with feature breakdown, interactive product preview, live calculator, and FAQ accordion.',
-    tags: ['SaaS', 'Conversion', 'FAQ Accordion'],
-    prompt: 'Build a SaaS AI startup landing page with animated feature cards, pricing toggle (Monthly/Yearly), customer logo cloud, and interactive FAQ.'
-  },
-  {
-    id: 'realestate-1',
-    category: 'Real Estate',
-    title: 'Skyline Luxury Estates',
-    description: 'Property search portal with price range filters, floor plan viewer, map location cards, and agent contact form.',
-    tags: ['Property Search', 'Mortgage Calc', 'Gallery'],
-    prompt: 'Create a luxury real estate portal with property filter controls, interactive photo gallery modal, mortgage calculator, and agent consultation form.'
-  },
-  {
-    id: 'blog-1',
-    category: 'Blog',
-    title: 'TechPulse Magazine & Articles',
-    description: 'Modern editorial blog with featured articles, category tags, read-time counters, search bar, and newsletter sub.',
-    tags: ['Editorial', 'Articles', 'Newsletter'],
-    prompt: 'Design a tech news blog with featured hero post, category filter pills, article reading time badges, author bio box, and email subscription box.'
-  },
-  {
-    id: 'business-1',
-    category: 'Business',
-    title: 'Vanguard Corporate Consulting',
-    description: 'Professional corporate agency site with service offerings, client case studies, team grid, and consultation scheduler.',
-    tags: ['Corporate', 'Consulting', 'Case Studies'],
-    prompt: 'Create a corporate business website with service highlights, client testimonial slider, stat counters, and online consultation booking.'
-  },
-  {
-    id: 'ecommerce-1',
-    category: 'Ecommerce',
-    title: 'Nova Tech Gadgets & Accessories',
-    description: 'Next-gen gadget store featuring instant search, ratings breakdown, checkout workflow, and promotional discount bar.',
-    tags: ['Tech Store', 'Checkout Flow', 'Ratings'],
-    prompt: 'Build a complete tech store web application with category sidebar, product star ratings, interactive cart sidebar, and multi-step checkout form.'
+    id: 'toxicity-quiz',
+    category: 'Education',
+    title: 'British hedgerow plant toxicity quiz',
+    description: 'Educational biology quiz with multiple choice cards about wild flora.',
+    image: 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=400&q=80',
+    views: '340',
+    likes: 42,
+    prompt: 'Build an educational multiple-choice quiz about toxic plants in the UK with image cards, score trackers, and biology guides.'
   }
 ];
