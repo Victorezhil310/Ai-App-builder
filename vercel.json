@@ -23,6 +23,10 @@
       "dest": "/ads.txt"
     },
     {
+      "src": "/google9b3c772b30ea79bb.html",
+      "dest": "/google9b3c772b30ea79bb.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
