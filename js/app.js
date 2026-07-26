@@ -342,6 +342,26 @@ class AppController {
       });
     });
 
+    // API Keys Settings setup
+    const geminiKeyInput = document.getElementById('settings-gemini-key');
+    const netlifyTokenInput = document.getElementById('settings-netlify-token');
+    
+    if (geminiKeyInput) geminiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+    if (netlifyTokenInput) netlifyTokenInput.value = localStorage.getItem('netlify_api_key') || '';
+
+    const saveKeysBtn = document.getElementById('save-settings-keys-btn');
+    if (saveKeysBtn) {
+      saveKeysBtn.addEventListener('click', () => {
+        const geminiVal = geminiKeyInput ? geminiKeyInput.value.trim() : '';
+        const netlifyVal = netlifyTokenInput ? netlifyTokenInput.value.trim() : '';
+        
+        localStorage.setItem('gemini_api_key', geminiVal);
+        localStorage.setItem('netlify_api_key', netlifyVal);
+        
+        this.toast.success('API Integration Keys saved successfully!');
+      });
+    }
+
     this.renderUserDashboard();
   }
 
@@ -550,6 +570,20 @@ class AppController {
 
         const projName = this.currentProject ? this.currentProject.title : 'My AI App';
         
+        // Generate Zip Blob in real-time if JSZip is loaded
+        let zipBlob = null;
+        if (window.JSZip && this.currentProject) {
+          try {
+            const zip = new window.JSZip();
+            zip.file('index.html', this.currentProject.files['index.html'] || '');
+            zip.file('style.css', this.currentProject.files['style.css'] || '');
+            zip.file('script.js', this.currentProject.files['script.js'] || '');
+            zipBlob = await zip.generateAsync({ type: 'blob' });
+          } catch (e) {
+            console.error('Failed to generate ZIP blob for deployment:', e);
+          }
+        }
+
         await this.deployManager.startDeploy(
           providerKey,
           projName,
@@ -559,7 +593,8 @@ class AppController {
           (record) => {
             if (logBox) logBox.innerHTML += `<div style="color:#10b981; font-weight:bold;">🚀 Live URL: <a href="${record.liveUrl}" target="_blank" style="color:#22d3ee;">${record.liveUrl}</a></div>`;
             this.toast.success(`Successfully deployed to ${record.provider}!`);
-          }
+          },
+          zipBlob
         );
       });
     });

@@ -15,7 +15,32 @@ export class AIEngine {
     const cleanPrompt = promptText.trim() || 'Modern AI Web Application';
     const title = this.extractTitle(cleanPrompt, builderType);
     
-    // Generate specialized template code based on prompt keywords & type
+    const apiKey = localStorage.getItem('gemini_api_key');
+    if (apiKey) {
+      try {
+        const response = await this.callGeminiAPI(apiKey, cleanPrompt, builderType);
+        if (response && response.html) {
+          return {
+            title,
+            builderType,
+            prompt: cleanPrompt,
+            createdAt: new Date().toISOString(),
+            files: {
+              'index.html': response.html,
+              'style.css': response.css || '',
+              'script.js': response.js || ''
+            }
+          };
+        }
+      } catch (err) {
+        console.error('Real Gemini API call failed:', err);
+        if (window.toast) {
+          window.toast.warning('Gemini API call failed (check settings key). Using local mock builder...');
+        }
+      }
+    }
+
+    // Fallback Mock Synthesizer
     const html = this.buildHTML(title, cleanPrompt, builderType);
     const css = this.buildCSS(cleanPrompt, builderType);
     const js = this.buildJS(cleanPrompt, builderType);
@@ -31,6 +56,62 @@ export class AIEngine {
         'script.js': js
       }
     };
+  }
+
+  async callGeminiAPI(apiKey, prompt, builderType) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    
+    const systemInstruction = `You are an expert full-stack web developer. You must design and build a modern, high-quality, beautiful, and fully responsive website or app according to the user's prompt. 
+    You must output a JSON object containing exactly three string fields:
+    - "html": Complete index.html document with head, embedded CSS stylesheet reference (<link rel="stylesheet" href="style.css">), and script reference (<script src="script.js"></script>). Do not include CSS inside style tags or JS inside script tags in the HTML.
+    - "css": Full, beautiful stylesheet (style.css) containing variables, custom glassmorphic elements, modern gradients, styling for all components, typography, layout grid/flex, animations, responsive media queries.
+    - "js": Responsive script.js code containing interactive elements, events, functions, and simulated data updates.
+    
+    Make the app look premium, using curated colors, glass cards, hover effects, nice layout, icons from fontawesome, and fonts from Google Fonts. Include realistic sample data/images from Unsplash/Picsum.
+    Return ONLY a raw JSON string of this structure: {"html": "...", "css": "...", "js": "..."}. Do not include markdown code block tags in your response.`;
+
+    const body = {
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: `Build a ${builderType} based on this prompt: "${prompt}". Return only the JSON object with html, css, and js keys.`
+            }
+          ]
+        }
+      ],
+      systemInstruction: {
+        parts: [
+          {
+            text: systemInstruction
+          }
+        ]
+      },
+      generationConfig: {
+        responseMimeType: 'application/json'
+      }
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      throw new Error(`API error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    const textContent = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!textContent) {
+      throw new Error('Empty response from model');
+    }
+
+    return JSON.parse(textContent.trim());
   }
 
   extractTitle(prompt, builderType) {

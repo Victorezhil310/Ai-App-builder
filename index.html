@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+  <meta name="google-adsense-account" content="ca-pub-9747982919206794">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9747982919206794" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI App Builder Free - Build Websites & Apps with AI without Coding</title>
@@ -314,7 +316,22 @@
 
             <!-- Subview: Settings -->
             <div id="dash-subview-settings" class="dash-subview" style="display:none;">
-              <h2>Account Settings</h2>
+              <h2>Integrations & API Settings</h2>
+              <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.25rem;">Enter your own developer API tokens to enable 100% real LLM generation and cloud hosting. Keys are stored locally on your device.</p>
+              
+              <div class="form-group">
+                <label class="form-label">Google Gemini API Key</label>
+                <input id="settings-gemini-key" type="password" class="form-control" placeholder="AIzaSy...">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Netlify Personal Access Token (for real hosting)</label>
+                <input id="settings-netlify-token" type="password" class="form-control" placeholder="netlify_pat_...">
+              </div>
+
+              <button id="save-settings-keys-btn" class="btn btn-primary btn-sm" style="margin-top:0.5rem; margin-bottom:1.5rem;">Save API Integration Keys</button>
+
+              <h2>Account Preferences</h2>
               <div class="form-group" style="margin-top:1rem;">
                 <label class="form-label">Default Export Format</label>
                 <select class="form-control">
