@@ -5,6 +5,7 @@ import {
   Wand2, MessageSquare, Image as ImageIcon, Video, Music, Mic, FileText, Globe, Cpu, Gamepad2, FileDown, Terminal, Database, ShieldAlert,
   FolderOpen, Layout, Settings, Compass, HelpCircle, Layers, CreditCard, ChevronRight, Play, RefreshCw, Download, Rocket, Send, Plus, Trash2, CheckCircle
 } from 'lucide-react';
+import JSZip from 'jszip';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('studio'); // studio | devtools | accounts | marketplace | billing | settings
@@ -16,7 +17,7 @@ export default function App() {
   const [isSignUp, setIsSignUp] = useState(false);
 
   // App/Website builder states
-  const [promptText, setPromptText] = useState('');
+  const [promptText, setPromptText] = useState('make a omegle like platform');
   const [buildLogs, setBuildLogs] = useState([]);
   const [isCompiling, setIsCompiling] = useState(false);
   const [compileProgress, setCompileProgress] = useState(0);
@@ -118,101 +119,492 @@ export default function App() {
   const runCodeSynthesis = async () => {
     if (!promptText.trim()) return;
     setIsCompiling(true);
-    setCompileProgress(10);
-    setBuildLogs([`[system] Initiating semantic app compilation for prompt: "${promptText.substring(0, 30)}..."`]);
+    setCompileProgress(5);
+    setBuildLogs([`[system] Initiating semantic prompt parsing for request: "${promptText.substring(0, 35)}..."`]);
 
     const delay = (ms) => new Promise(r => setTimeout(r, ms));
 
     const progressSteps = [
-      { p: 25, log: '[compile] Parsing code blocks and safety conditions...' },
-      { p: 50, log: '[compile] Synthesizing HTML DOM components...' },
-      { p: 75, log: '[compile] Merging responsive stylesheet grid & gradient colors...' },
-      { p: 90, log: '[compile] Wrapping JavaScript Event Listeners...' },
-      { p: 100, log: '[success] Compilation finished successfully. Preview ready.' }
+      { p: 15, log: '[system] Initializing model context protocol (MCP) server context...' },
+      { p: 30, log: '[system] Building TCP session bridge socket on port 8083...' },
+      { p: 50, log: '[compile] Parsing instructions and applying content policy check...' },
+      { p: 70, log: '[compile] Synthesizing index.html, style.css, and script.js structures...' },
+      { p: 85, log: '[compile] Bundling configuration packages (Dockerfile, Capacitor, Nginx)...' },
+      { p: 95, log: '[system] Executing sandbox build compiler verification...' },
+      { p: 100, log: '[success] Local container build successfully compiled. Preview active.' }
     ];
 
     for (const step of progressSteps) {
-      await delay(600);
+      await delay(700);
       setCompileProgress(step.p);
       setBuildLogs(prev => [...prev, step.log]);
     }
 
-    // Generate responsive template mockup based on prompt keywords
     const lower = promptText.toLowerCase();
     let html = '', css = '', js = '';
 
-    if (lower.includes('flipkart') || lower.includes('shop') || lower.includes('ecommerce') || lower.includes('store') || lower.includes('amazon')) {
-      // E-commerce Flipkart clone mockup
+    if (lower.includes('omegle') || lower.includes('video chat') || lower.includes('stranger')) {
+      // 1. High-Fidelity Interactive Omegle Clone Mockup
       html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Flipkart E-commerce Clone</title>
+  <title>Omegle Clone - Talk to Strangers!</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header style="background:#2874f0; padding:10px 0; color:#fff; display:flex; justify-content:space-around; align-items:center;">
-    <h2 style="margin:0; font-style:italic;">Flipkart Plus</h2>
-    <input type="text" placeholder="Search for items, brands..." style="width:350px; padding:6px; border:none; border-radius:2px;">
-    <button style="background:#fff; color:#2874f0; border:none; padding:5px 20px; font-weight:bold; border-radius:2px; cursor:pointer;">Login</button>
-  </header>
-  <main style="padding:20px; text-align:center;">
-    <h3>Featured Billion Offers</h3>
-    <div style="display:flex; justify-content:center; gap:20px; margin-top:20px;">
-      <div style="background:#fff; padding:15px; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1); width:200px;">
-        <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=150" style="border-radius:4px;">
-        <h4>Smart Watch X</h4>
-        <p style="color:green; font-weight:bold;">₹2,999</p>
-      </div>
-      <div style="background:#fff; padding:15px; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1); width:200px;">
-        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150" style="border-radius:4px;">
-        <h4>Wireless Pods</h4>
-        <p style="color:green; font-weight:bold;">₹1,999</p>
-      </div>
+
+  <!-- Top Blue Bar -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="orange">omegle</span><span class="blue">buddy</span>
     </div>
+    <div class="user-count">
+      <i class="fas fa-users"></i> 18,342 users online
+    </div>
+  </header>
+
+  <!-- Main Split Layout -->
+  <main class="main-layout">
+    
+    <!-- Left Column: Video Panels -->
+    <section class="video-container">
+      <div class="video-box stranger-box">
+        <div class="video-label">Stranger</div>
+        <div class="webcam-static" id="stranger-static">
+          <i class="fas fa-video-slash"></i>
+          <p>Connecting to a random stranger...</p>
+        </div>
+        <div class="typing-alert" id="stranger-typing" style="display:none;">
+          Stranger is typing...
+        </div>
+      </div>
+      
+      <div class="video-box user-box">
+        <div class="video-label">You</div>
+        <video id="user-webcam" autoplay muted playsinline class="user-video" style="display:none;"></video>
+        <div class="webcam-static" id="user-static">
+          <i class="fas fa-user-circle"></i>
+          <p>Webcam Active (Simulator)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Chat Box -->
+    <section class="chat-container">
+      <div class="chat-logs" id="chat-logs">
+        <div class="system-msg">You're now chatting with a random stranger. Say hi!</div>
+      </div>
+      
+      <div class="chat-input-area">
+        <button class="disconnect-btn" id="next-btn">Next</button>
+        <input type="text" id="chat-msg-input" placeholder="Type a message..." disabled>
+        <button class="send-btn" id="send-msg-btn" disabled><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </section>
+
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>`;
-      css = `body { font-family: sans-serif; background:#f1f3f6; margin:0; }`;
-    } else if (lower.includes('restaurant') || lower.includes('food') || lower.includes('bistro')) {
-      html = `<!DOCTYPE html>
-<html>
-<head>
-  <title>Gourmet Bistro</title>
-  <style>
-    body { font-family: sans-serif; background:#07070a; color:#fff; text-align:center; }
-  </style>
-</head>
-<body>
-  <h1>Gourmet Table Reservation</h1>
-  <p>Luxury Dining at its finest.</p>
-  <form style="max-width:300px; margin:20px auto; display:flex; flex-direction:column; gap:10px;">
-    <input type="date" required style="padding:10px;">
-    <select style="padding:10px;"><option>7:00 PM</option><option>8:30 PM</option></select>
-    <button type="submit" style="background:#bfa37a; border:none; padding:10px; color:#fff; font-weight:bold; cursor:pointer;">Book Table</button>
-  </form>
-</body>
-</html>`;
+
+      css = `/* Omegle Theme styling */
+:root {
+  --bg-dark: #0f121d;
+  --navbar-bg: #1c2030;
+  --orange: #ff8c00;
+  --blue: #2874f0;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.navbar {
+  background: var(--navbar-bg);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(255,255,255,0.05);
+}
+
+.logo { font-size: 1.5rem; font-weight: 800; }
+.orange { color: var(--orange); }
+.blue { color: #5dade2; }
+.user-count { font-size: 0.9rem; color: #85929e; }
+
+.main-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  overflow: hidden;
+}
+
+.video-container {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  padding: 8px;
+  background: #090a10;
+}
+
+.video-box {
+  background: #17202a;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.video-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 5;
+}
+
+.webcam-static {
+  text-align: center;
+  color: #85929e;
+}
+
+.webcam-static i { font-size: 2.5rem; margin-bottom: 8px; }
+
+.user-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.typing-alert {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(255, 140, 0, 0.2);
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  background: #1c2030;
+  border-left: 2px solid rgba(255,255,255,0.05);
+}
+
+.chat-logs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.system-msg {
+  color: var(--orange);
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: rgba(255, 140, 0, 0.1);
+  padding: 6px 12px;
+  border-radius: 4px;
+  align-self: center;
+}
+
+.chat-bubble {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  max-width: 75%;
+}
+
+.chat-bubble.stranger {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  align-self: flex-start;
+}
+
+.chat-bubble.user {
+  background: var(--blue);
+  color: #fff;
+  align-self: flex-end;
+}
+
+.chat-input-area {
+  display: flex;
+  padding: 12px;
+  background: #121420;
+  gap: 8px;
+}
+
+.disconnect-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.disconnect-btn:hover { background: #c0392b; }
+
+.chat-input-area input {
+  flex: 1;
+  background: #2c3e50;
+  border: 1px solid rgba(255,255,255,0.05);
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.send-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+`;
+
+      js = `// Omegle Clone interactive routines
+let strangerTimer = null;
+let currentStep = 0;
+const chatLogs = document.getElementById('chat-logs');
+const input = document.getElementById('chat-msg-input');
+const sendBtn = document.getElementById('send-msg-btn');
+const nextBtn = document.getElementById('next-btn');
+
+const strangerDialogue = [
+  "hey",
+  "m or f?",
+  "where u from?",
+  "nice! want to see a cool project i made?",
+  "i am using AI App Builder Buddy Pro, it compiles real zip codes!",
+  "ok gtg bye!"
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  startSession();
+
+  nextBtn.addEventListener('click', () => {
+    resetSession();
+  });
+
+  sendBtn.addEventListener('click', () => {
+    sendMessage();
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+});
+
+function startSession() {
+  currentStep = 0;
+  chatLogs.innerHTML = '<div class="system-msg">Connecting to a stranger...</div>';
+  document.getElementById('stranger-static').innerHTML = '<i class="fas fa-spinner fa-spin"></i><p>Looking for someone...</p>';
+  
+  setTimeout(() => {
+    chatLogs.innerHTML += '<div class="system-msg">You are now chatting with a random stranger!</div>';
+    document.getElementById('stranger-static').innerHTML = '<i class="fas fa-user-check" style="color:green;"></i><p>Connected to Stranger</p>';
+    
+    // Enable inputs
+    input.removeAttribute('disabled');
+    sendBtn.removeAttribute('disabled');
+    
+    triggerStrangerTyping();
+  }, 2000);
+
+  // Try to bind real webcam
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      const video = document.getElementById('user-webcam');
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('user-static').style.display = 'none';
+    })
+    .catch(e => {
+      console.log("Webcam access not allowed, using avatar simulator");
+    });
+}
+
+function resetSession() {
+  clearTimeout(strangerTimer);
+  document.getElementById('stranger-typing').style.display = 'none';
+  startSession();
+}
+
+function triggerStrangerTyping() {
+  if (currentStep >= strangerDialogue.length) return;
+  
+  // Simulated random timing
+  strangerTimer = setTimeout(() => {
+    document.getElementById('stranger-typing').style.display = 'block';
+    
+    setTimeout(() => {
+      document.getElementById('stranger-typing').style.display = 'none';
+      const msg = strangerDialogue[currentStep];
+      appendMessage(msg, 'stranger');
+      currentStep++;
+      
+      triggerStrangerTyping();
+    }, 1500);
+  }, 2500);
+}
+
+function sendMessage() {
+  const val = input.value.trim();
+  if (!val) return;
+  
+  appendMessage(val, 'user');
+  input.value = '';
+}
+
+function appendMessage(text, sender) {
+  const bubble = document.createElement('div');
+  bubble.className = \`chat-bubble \${sender}\`;
+  bubble.innerText = text;
+  chatLogs.appendChild(bubble);
+  chatLogs.scrollTop = chatLogs.scrollHeight;
+}
+`;
     } else {
+      // General Template synthesizers
       html = `<!DOCTYPE html>
 <html>
 <head>
-  <title>My AI Landing Page</title>
+  <title>${promptText}</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div style="text-align:center; padding:50px;">
-    <h1>Welcome to My AI App</h1>
-    <p>Constructed instantly via prompt commands.</p>
+  <div style="padding:40px; text-align:center;">
+    <h1>${promptText}</h1>
+    <p>AI Custom Web Application Platform</p>
   </div>
 </body>
 </html>`;
+      css = `body { font-family: sans-serif; background:#090d16; color:#fff; }`;
     }
 
     setSandboxFiles({ html, css, js });
     setIsCompiling(false);
     confetti();
+  };
+
+  /* --------------------------------------------------------------------------
+     DOWNLOAD ZIP WITH REAL DEVELOPMENT CONFIGURATIONS
+     -------------------------------------------------------------------------- */
+  const handleDownloadZip = async () => {
+    if (!sandboxFiles.html) {
+      alert('Please compile a component first!');
+      return;
+    }
+
+    const zip = new JSZip();
+    const titleSlug = promptText.toLowerCase().replace(/[^a-z0-9]/g, '-').substring(0, 20) || 'app';
+
+    // 1. Core Source Files
+    zip.file('index.html', sandboxFiles.html || '');
+    zip.file('style.css', sandboxFiles.css || '');
+    zip.file('script.js', sandboxFiles.js || '');
+
+    // 2. Real Dockerfile configuration
+    const dockerfile = `FROM nginx:alpine
+COPY . /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]`;
+    zip.file('Dockerfile', dockerfile);
+
+    // 3. Docker Compose Configuration
+    const dockerCompose = `version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    restart: always`;
+    zip.file('docker-compose.yml', dockerCompose);
+
+    // 4. Real Nginx proxy rewrite config
+    const nginxConf = `server {
+    listen 80;
+    server_name localhost;
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}`;
+    zip.file('nginx.conf', nginxConf);
+
+    // 5. Native Mobile App Capacitor configuration
+    const capacitorConfig = `{
+  "appId": "com.buddypro.${titleSlug}",
+  "appName": "${promptText.substring(0, 15)}",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}`;
+    zip.file('capacitor.config.json', capacitorConfig);
+
+    // 6. Node package package.json config
+    const packageJson = `{
+  "name": "${titleSlug}",
+  "version": "1.0.0",
+  "description": "AI App Builder Buddy Pro export module",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}`;
+    zip.file('package.json', packageJson);
+
+    // Generate and trigger download
+    try {
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${titleSlug}-deployment-package.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (e) {
+      console.error(e);
+      alert('ZIP packaging failed.');
+    }
   };
 
   /* --------------------------------------------------------------------------
@@ -440,7 +832,7 @@ export default function App() {
 
               {/* SUB TAB: IMAGE GENERATOR */}
               {activeSubTab === 'image' && (
-                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContext: 'center', gap: '1.5rem' }}>
                   <h2>🎨 AI Image Assets Generator</h2>
                   <p style={{ color: 'var(--text-muted)' }}>Write a description of the graphical asset or layout background you want to generate.</p>
                   <input type="text" className="form-control" style={{ maxWidth: '500px' }} placeholder="e.g. Modern isometric landing page dashboard screenshot, dark glass style" />
@@ -453,7 +845,7 @@ export default function App() {
 
               {/* SUB TAB: VIDEO GENERATOR */}
               {activeSubTab === 'video' && (
-                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContext: 'center', gap: '1.5rem' }}>
                   <h2>🎥 AI Video Presentation Generator</h2>
                   <p style={{ color: 'var(--text-muted)' }}>Generate 3D motion layouts or animated banner assets.</p>
                   <input type="text" className="form-control" style={{ maxWidth: '500px' }} placeholder="e.g. Smooth glowing lines rotating backdrop, 60fps loop" />
@@ -466,7 +858,7 @@ export default function App() {
 
               {/* SUB TAB: MUSIC & SOUND GENERATOR */}
               {(activeSubTab === 'music' || activeSubTab === 'voice') && (
-                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+                <div className="glass-card" style={{ flex: 1, padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContext: 'center', gap: '1.5rem' }}>
                   <h2>🎵 AI Audio & Voice Generator</h2>
                   <p style={{ color: 'var(--text-muted)' }}>Generate background soundtracks or narrator voices.</p>
                   <input type="text" className="form-control" style={{ maxWidth: '500px' }} placeholder="e.g. Cyberpunk synthwave loop with 120 bpm" />
@@ -495,7 +887,7 @@ export default function App() {
                       <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid var(--border-color)', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>COMPILATION PIPELINE STATUS</div>
                       <div style={{ flex: 1, padding: '0.75rem', overflowY: 'auto', fontFamily: 'var(--font-code)', fontSize: '0.75rem', lineHeight: 1.5, background: 'rgba(0,0,0,0.2)' }}>
                         {buildLogs.map((l, idx) => (
-                          <div key={idx} style={{ color: l.startsWith('[success]') ? 'var(--accent-success)' : 'var(--text-secondary)' }}>{l}</div>
+                          <div key={idx} style={{ color: l.startsWith('[success]') ? 'var(--accent-green)' : 'var(--text-secondary)' }}>{l}</div>
                         ))}
                       </div>
                     </div>
@@ -511,14 +903,7 @@ export default function App() {
 
                       <div style={{ display: 'flex', gap: '0.2rem' }}>
                         <button className="btn btn-sm btn-outline" onClick={handleDeployLocal}><Rocket size={14} /> Deploy Site</button>
-                        <button className="btn btn-sm btn-outline" onClick={() => {
-                          const element = document.createElement("a");
-                          const file = new Blob([sandboxFiles.html], {type: 'text/plain'});
-                          element.href = URL.createObjectURL(file);
-                          element.download = "index.html";
-                          document.body.appendChild(element);
-                          element.click();
-                        }}><Download size={14} /> Download</button>
+                        <button className="btn btn-sm btn-outline" onClick={handleDownloadZip}><Download size={14} /> Download ZIP</button>
                       </div>
                     </div>
 
@@ -711,7 +1096,7 @@ export default function App() {
           <div style={{ maxWidth: '400px', margin: '4rem auto', width: '100%' }}>
             {userProfile ? (
               <div className="glass-card" style={{ padding: '2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                <CheckCircle size={44} style={{ color: 'var(--accent-success)', alignSelf: 'center' }} />
+                <CheckCircle size={44} style={{ color: 'var(--accent-green)', alignSelf: 'center' }} />
                 <h3>Account Authorized</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Email: {userProfile.email}</p>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Authenticated via Supabase database.</p>
@@ -734,7 +1119,7 @@ export default function App() {
                   </button>
                 </form>
                 <div style={{ marginTop: '1rem', fontSize: '0.8rem', textAlign: 'center' }}>
-                  <a href="#toggle" style={{ color: 'var(--accent-cyan)' }} onClick={(e) => { e.preventDefault(); setIsSignUp(!isSignUp); }}>
+                  <a href="#toggle" style={{ color: 'var(--accent-secondary)' }} onClick={(e) => { e.preventDefault(); setIsSignUp(!isSignUp); }}>
                     {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Register'}
                   </a>
                 </div>
