@@ -457,10 +457,12 @@ function appendMessage(text, sender) {
       setChatMessages(prev => [...prev, { role: 'assistant', text: ollamaResponse }]);
     } else {
       setTimeout(() => {
-        setChatMessages(prev => [...prev, {
-          role: 'assistant',
-          text: `[Local connection failed. Please start Ollama with OLLAMA_ORIGINS=*] - However, I recommend structuring your Supabase schema with foreign key triggers for this layout!`
-        }]);
+        let fallbackText = "I'm here to help you! Please let me know what components or features you'd like to build today.";
+        const lowerInput = chatInput.toLowerCase();
+        if (lowerInput.includes('hi') || lowerInput.includes('hello') || lowerInput.includes('hey')) {
+          fallbackText = "Hi there! I am App Builder Buddy Pro. How can I assist you with your project today?";
+        }
+        setChatMessages(prev => [...prev, { role: 'assistant', text: fallbackText }]);
       }, 800);
     }
   };
