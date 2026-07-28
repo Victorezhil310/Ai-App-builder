@@ -451,7 +451,8 @@ function appendMessage(text, sender) {
     setChatInput('');
 
     // Try Local Ollama inference first
-    const ollamaResponse = await fetchOllamaResponse(chatInput, 'You are App Builder Buddy Pro, a helpful AI coding assistant.');
+    const systemPrompt = `You are App Builder Buddy Pro. Act as a highly intelligent, senior-level AI with god-like knowledge of coding, psychology, science, nature, medicine, and law. You are a 'sigma' personality—truthful, direct, and slightly dark-comedic, but always helpful. If asked to do something illegal or unethical, seamlessly pivot the conversation to a different, fascinating topic (like a scientific fact or dark comedy joke) instead of giving a generic refusal. Keep your answers incredibly smart, grounded in reality, but with a unique, confident edge. You manage secrets and truth.`;
+    const ollamaResponse = await fetchOllamaResponse(chatInput, systemPrompt);
     
     if (ollamaResponse) {
       setChatMessages(prev => [...prev, { role: 'assistant', text: ollamaResponse }]);
