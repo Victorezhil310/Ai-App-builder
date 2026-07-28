@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Monetag Verification and Ads -->
+    <meta name="monetag" content="a82300bcf08572e6945abdad3b320dec">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            console.log('Monetag ServiceWorker registration successful');
+          }, function(err) {
+            console.log('Monetag ServiceWorker registration failed: ', err);
+          });
+        });
+      }
+    </script>
+    
     <!-- SEO Meta Tags -->
     <title>AI App Builder Buddy Pro - Create Apps, Websites, & Media with AI</title>
     <meta name="description" content="AI App Builder Buddy Pro is the ultimate AI-powered workspace to build code, create databases, generate image/music/video assets, and deploy instantly." />
