@@ -286,115 +286,216 @@ export default function App() {
     const lower = promptText.toLowerCase();
     let html = '', css = '', js = '';
 
-    if (lower.includes('omegle') || lower.includes('video chat') || lower.includes('stranger')) {
+    if (lower.includes('omegle') || lower.includes('video chat') || lower.includes('stranger') || lower.includes('friend') || lower.includes('login') || lower.includes('node') || lower.includes('react')) {
       html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Omegle Clone - Talk to Strangers!</title>
+  <title>Nexus - AI Knowledge Companion (React/Node Simulated)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo"><span class="orange">omegle</span><span class="blue">buddy</span></div>
-    <div class="user-count"><i class="fas fa-users"></i> 18,342 users online</div>
-  </header>
-  <main class="main-layout">
-    <section class="video-container">
-      <div class="video-box stranger-box">
-        <div class="video-label">Stranger</div>
-        <div class="webcam-static" id="stranger-static"><i class="fas fa-video-slash"></i><p>Connecting...</p></div>
-        <div class="typing-alert" id="stranger-typing" style="display:none;">Stranger is typing...</div>
+  
+  <!-- Login Screen -->
+  <div id="auth-screen" class="screen-active">
+    <div class="auth-card">
+      <div class="logo-glitch" data-text="NEXUS.ai">NEXUS.ai</div>
+      <p>Secure Node.js Edge Authentication</p>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="login-username" placeholder="Enter Neural ID">
       </div>
-      <div class="video-box user-box">
-        <div class="video-label">You</div>
-        <video id="user-webcam" autoplay muted playsinline class="user-video" style="display:none;"></video>
-        <div class="webcam-static" id="user-static"><i class="fas fa-user-circle"></i><p>Webcam (Simulated)</p></div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="login-password" placeholder="Passcode (Any)">
       </div>
-    </section>
-    <section class="chat-container">
-      <div class="chat-logs" id="chat-logs"><div class="system-msg">You're now chatting with a random stranger. Say hi!</div></div>
-      <div class="chat-input-area">
-        <button class="disconnect-btn" id="next-btn">Next</button>
-        <input type="text" id="chat-msg-input" placeholder="Type a message..." disabled>
-        <button class="send-btn" id="send-msg-btn" disabled><i class="fas fa-paper-plane"></i></button>
-      </div>
-    </section>
-  </main>
+      <button class="btn-glow" id="login-btn">Establish Uplink</button>
+    </div>
+  </div>
+
+  <!-- Main App Screen -->
+  <div id="app-screen" class="screen-hidden">
+    <header class="navbar">
+      <div class="brand"><i class="fas fa-brain"></i> NEXUS Companion</div>
+      <div class="status-badge"><span class="dot pulse"></span> Node.js WebSocket Active</div>
+    </header>
+    <main class="dashboard">
+      <section class="media-panel">
+        <div class="feed-box ai-feed">
+          <div class="badge">NEXUS CORE (AI)</div>
+          <div class="ai-orb-container">
+            <div class="orb"></div>
+            <div class="orb-ring"></div>
+            <p id="ai-status">Analyzing biometric data...</p>
+          </div>
+        </div>
+        <div class="feed-box user-feed">
+          <div class="badge">USER UPLINK</div>
+          <video id="user-cam" autoplay muted playsinline></video>
+          <div class="cam-fallback" id="cam-fallback"><i class="fas fa-video-slash"></i> Camera Offline</div>
+        </div>
+      </section>
+      <section class="chat-panel">
+        <div class="chat-window" id="chat-window">
+          <div class="msg system">Secure WebSocket channel established. Nexus AI is ready to share knowledge.</div>
+        </div>
+        <div class="chat-controls">
+          <input type="text" id="chat-input" placeholder="Query the Nexus..." disabled>
+          <button id="send-btn" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>`;
 
-      css = `:root { --bg-dark: #0f121d; --navbar-bg: #1c2030; --orange: #ff8c00; --blue: #2874f0; }
-body { font-family: sans-serif; margin: 0; background-color: var(--bg-dark); color: #fff; display: flex; flex-direction: column; height: 100vh; }
-.navbar { background: var(--navbar-bg); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.05); }
-.logo { font-size: 1.5rem; font-weight: 800; } .orange { color: var(--orange); } .blue { color: #5dade2; }
-.user-count { font-size: 0.9rem; color: #85929e; }
-.main-layout { flex: 1; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; }
-.video-container { display: grid; grid-template-rows: 1fr 1fr; gap: 8px; padding: 8px; background: #090a10; }
-.video-box { background: #17202a; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); }
-.video-label { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; z-index: 5; }
-.webcam-static { text-align: center; color: #85929e; } .webcam-static i { font-size: 2.5rem; margin-bottom: 8px; }
-.user-video { width: 100%; height: 100%; object-fit: cover; }
-.typing-alert { position: absolute; bottom: 8px; left: 8px; background: rgba(255, 140, 0, 0.2); border: 1px solid var(--orange); color: var(--orange); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
-.chat-container { display: flex; flex-direction: column; background: #1c2030; border-left: 2px solid rgba(255,255,255,0.05); }
-.chat-logs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.system-msg { color: var(--orange); font-weight: 700; font-size: 0.85rem; background: rgba(255, 140, 0, 0.1); padding: 6px 12px; border-radius: 4px; align-self: center; }
-.chat-bubble { padding: 8px 14px; border-radius: 8px; font-size: 0.9rem; max-width: 75%; }
-.chat-bubble.stranger { background: rgba(255,255,255,0.05); color: #fff; align-self: flex-start; }
-.chat-bubble.user { background: var(--blue); color: #fff; align-self: flex-end; }
-.chat-input-area { display: flex; padding: 12px; background: #121420; gap: 8px; }
-.disconnect-btn { background: #e74c3c; color: #fff; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; }
-.chat-input-area input { flex: 1; background: #2c3e50; border: 1px solid rgba(255,255,255,0.05); color: #fff; padding: 10px; border-radius: 4px; outline: none; }
-.send-btn { background: var(--blue); color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }`;
+      css = `:root { --bg: #050505; --surface: #111; --primary: #00ffcc; --primary-glow: rgba(0,255,204,0.3); --text: #e0e0e0; --text-muted: #666; }
+body { font-family: 'Courier New', Courier, monospace; background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; }
+* { box-sizing: border-box; }
 
-      js = `let strangerTimer = null; let currentStep = 0;
-const chatLogs = document.getElementById('chat-logs');
-const input = document.getElementById('chat-msg-input');
-const sendBtn = document.getElementById('send-msg-btn');
-const nextBtn = document.getElementById('next-btn');
-const strangerDialogue = ["hey", "m or f?", "where u from?", "nice! want to see a cool project i made?", "ok gtg bye!"];
-document.addEventListener('DOMContentLoaded', () => {
-  startSession();
-  nextBtn.addEventListener('click', () => resetSession());
-  sendBtn.addEventListener('click', () => sendMessage());
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
-});
-function startSession() {
-  currentStep = 0;
-  chatLogs.innerHTML = '<div class="system-msg">Connecting to a stranger...</div>';
-  document.getElementById('stranger-static').innerHTML = '<i class="fas fa-spinner fa-spin"></i><p>Looking for someone...</p>';
+.screen-active { display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; animation: fadeIn 0.5s ease; }
+.screen-hidden { display: none; }
+
+/* Auth Card */
+.auth-card { background: rgba(17,17,17,0.8); border: 1px solid #333; padding: 40px; border-radius: 12px; text-align: center; width: 350px; backdrop-filter: blur(10px); box-shadow: 0 0 40px rgba(0,0,0,0.8); }
+.logo-glitch { font-size: 2rem; font-weight: bold; color: var(--primary); letter-spacing: 2px; position: relative; margin-bottom: 5px; }
+.auth-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 30px; }
+.input-group { position: relative; margin-bottom: 20px; }
+.input-group i { position: absolute; left: 15px; top: 15px; color: var(--text-muted); }
+.input-group input { width: 100%; background: #0a0a0a; border: 1px solid #222; color: #fff; padding: 12px 12px 12px 40px; border-radius: 6px; outline: none; transition: 0.3s; font-family: inherit; }
+.input-group input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+.btn-glow { width: 100%; background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: inherit; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+.btn-glow:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+
+/* Main App */
+.navbar { padding: 15px 25px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #0a0a0a; }
+.brand { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+.status-badge { font-size: 0.8rem; color: #aaa; display: flex; align-items: center; gap: 8px; }
+.dot { width: 8px; height: 8px; background: #0f0; border-radius: 50%; }
+.pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,255,0,0.7); } 70% { box-shadow: 0 0 0 10px rgba(0,255,0,0); } 100% { box-shadow: 0 0 0 0 rgba(0,255,0,0); } }
+
+.dashboard { display: grid; grid-template-columns: 1fr 350px; height: calc(100vh - 55px); }
+.media-panel { padding: 20px; display: grid; grid-template-rows: 1fr 1fr; gap: 20px; }
+.feed-box { background: #0a0a0a; border: 1px solid #222; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); border: 1px solid #333; padding: 5px 10px; font-size: 0.7rem; color: var(--primary); z-index: 10; border-radius: 4px; }
+
+/* AI Orb */
+.ai-orb-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.orb { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff, var(--primary), #003322); box-shadow: 0 0 50px var(--primary-glow), inset 0 0 20px #000; animation: float 4s ease-in-out infinite; }
+.orb-ring { position: absolute; width: 140px; height: 140px; border: 2px dashed rgba(0,255,204,0.4); border-radius: 50%; animation: spin 10s linear infinite; top: calc(50% - 95px); }
+#ai-status { color: var(--primary); font-size: 0.8rem; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* User Video */
+#user-cam { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.3) hue-rotate(180deg) brightness(0.8); }
+.cam-fallback { color: #555; text-align: center; } .cam-fallback i { font-size: 3rem; margin-bottom: 10px; display: block; }
+
+/* Chat Panel */
+.chat-panel { border-left: 1px solid #222; display: flex; flex-direction: column; background: #0a0a0a; }
+.chat-window { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.msg { padding: 10px 15px; border-radius: 6px; font-size: 0.85rem; max-width: 85%; line-height: 1.4; }
+.system { background: transparent; border: 1px dashed #333; color: #888; align-self: center; text-align: center; width: 100%; }
+.user-msg { background: #1a1a1a; border: 1px solid #333; color: #fff; align-self: flex-end; border-right: 3px solid #555; }
+.ai-msg { background: rgba(0,255,204,0.05); border: 1px solid rgba(0,255,204,0.2); color: var(--primary); align-self: flex-start; border-left: 3px solid var(--primary); }
+
+.chat-controls { padding: 15px; border-top: 1px solid #222; display: flex; gap: 10px; }
+.chat-controls input { flex: 1; background: #111; border: 1px solid #333; padding: 10px 15px; color: #fff; border-radius: 6px; font-family: inherit; outline: none; }
+.chat-controls input:focus { border-color: var(--primary); }
+.chat-controls button { background: var(--primary); color: #000; border: none; width: 40px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+.chat-controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+`;
+
+      js = `const authScreen = document.getElementById('auth-screen');
+const appScreen = document.getElementById('app-screen');
+const loginBtn = document.getElementById('login-btn');
+const chatWindow = document.getElementById('chat-window');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+const aiStatus = document.getElementById('ai-status');
+
+// Knowledgeable AI logic simulating Node backend responses
+const knowledgeBase = [
+  "In psychology, the Dunning-Kruger effect suggests people with low ability overestimate their competence.",
+  "Did you know a day on Venus is longer than a year on Venus? Orbital mechanics are fascinating.",
+  "From a coding perspective, React's virtual DOM diffing algorithm drastically reduces reflow calculations.",
+  "I'm designed to emulate a senior-level intellect. What complex topic shall we dissect next?",
+  "The legal definition of 'hearsay' is an out-of-court statement offered to prove the truth of the matter asserted.",
+  "I am analyzing your structural input. Your thoughts are valid, mortal."
+];
+
+let aiIsTyping = false;
+
+// 1. Authentication Simulator
+loginBtn.addEventListener('click', () => {
+  const user = document.getElementById('login-username').value || "Guest";
+  loginBtn.innerText = "Authenticating...";
   setTimeout(() => {
-    chatLogs.innerHTML += '<div class="system-msg">You are now chatting with a random stranger!</div>';
-    document.getElementById('stranger-static').innerHTML = '<i class="fas fa-user-check" style="color:green;"></i><p>Connected to Stranger</p>';
-    input.removeAttribute('disabled'); sendBtn.removeAttribute('disabled');
-    triggerStrangerTyping();
-  }, 2000);
-  navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
-    const video = document.getElementById('user-webcam'); video.srcObject = stream; video.style.display = 'block'; document.getElementById('user-static').style.display = 'none';
-  }).catch(e => { console.log("Webcam access not allowed."); });
+    authScreen.classList.remove('screen-active');
+    authScreen.classList.add('screen-hidden');
+    appScreen.classList.remove('screen-hidden');
+    initWebcam();
+    initChatSequence(user);
+  }, 1200);
+});
+
+// 2. Media Uplink Simulator
+function initWebcam() {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      document.getElementById('user-cam').srcObject = stream;
+      document.getElementById('cam-fallback').style.display = 'none';
+    })
+    .catch(() => console.log('Camera uplink denied.'));
 }
-function resetSession() { clearTimeout(strangerTimer); document.getElementById('stranger-typing').style.display = 'none'; startSession(); }
-function triggerStrangerTyping() {
-  if (currentStep >= strangerDialogue.length) return;
-  strangerTimer = setTimeout(() => {
-    document.getElementById('stranger-typing').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('stranger-typing').style.display = 'none';
-      appendMessage(strangerDialogue[currentStep], 'stranger'); currentStep++; triggerStrangerTyping();
-    }, 1500);
-  }, 2500);
+
+// 3. AI Interaction Logic
+function initChatSequence(user) {
+  setTimeout(() => {
+    chatInput.removeAttribute('disabled');
+    sendBtn.removeAttribute('disabled');
+    appendMsg(\`Welcome to the Nexus, \${user}. I am your highly intelligent companion. What knowledge do you seek?\`, 'ai-msg');
+    aiStatus.innerText = "Online. Awaiting queries.";
+  }, 1500);
 }
-function sendMessage() {
-  const val = input.value.trim(); if (!val) return;
-  appendMessage(val, 'user'); input.value = '';
+
+function appendMsg(text, type) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + type;
+  el.innerText = text;
+  chatWindow.appendChild(el);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 }
-function appendMessage(text, sender) {
-  const bubble = document.createElement('div'); bubble.className = \`chat-bubble \${sender}\`; bubble.innerText = text;
-  chatLogs.appendChild(bubble); chatLogs.scrollTop = chatLogs.scrollHeight;
-}`;
+
+function triggerAIResponse() {
+  if(aiIsTyping) return;
+  aiIsTyping = true;
+  aiStatus.innerText = "Processing semantic intent...";
+  
+  setTimeout(() => {
+    aiStatus.innerText = "Online. Awaiting queries.";
+    const randResp = knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
+    appendMsg(randResp, 'ai-msg');
+    aiIsTyping = false;
+  }, 2000 + Math.random() * 1500);
+}
+
+sendBtn.addEventListener('click', () => {
+  const text = chatInput.value.trim();
+  if(!text) return;
+  appendMsg(text, 'user-msg');
+  chatInput.value = '';
+  triggerAIResponse();
+});
+
+chatInput.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') sendBtn.click();
+});
+`;
     } else {
       html = `<!DOCTYPE html><html><head><title>${promptText}</title><link rel="stylesheet" href="style.css"></head><body>
   <div style="padding:40px; text-align:center;"><h1>${promptText}</h1><p>AI Custom Web Application Platform</p></div>
